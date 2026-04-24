@@ -10,12 +10,20 @@ type MatchRow = {
   user_a: string;
   user_b: string;
   created_at: string;
+  last_read_a: string;
+  last_read_b: string;
   other: {
     id: string;
     display_name: string | null;
     image_url: string | null;
     role: "creator" | "brand" | null;
   } | null;
+  lastMessage: {
+    content: string;
+    sender_id: string;
+    created_at: string;
+  } | null;
+  unread: boolean;
 };
 
 export const Route = createFileRoute("/matches")({
@@ -44,16 +52,46 @@ function Matches() {
         return;
       }
       const otherIds = ms.map((m) => (m.user_a === user.id ? m.user_b : m.user_a));
-      const { data: profs } = await supabase
-        .from("profiles")
-        .select("id, display_name, image_url, role")
-        .in("id", otherIds);
+      const matchIds = ms.map((m) => m.id);
+      const [{ data: profs }, { data: msgs }] = await Promise.all([
+        supabase
+          .from("profiles")
+          .select("id, display_name, image_url, role")
+          .in("id", otherIds),
+        matchIds.length
+          ? supabase
+              .from("messages")
+              .select("match_id, sender_id, content, created_at")
+              .in("match_id", matchIds)
+              .order("created_at", { ascending: false })
+          : Promise.resolve({ data: [] as { match_id: string; sender_id: string; content: string; created_at: string }[] }),
+      ]);
       const byId = new Map((profs ?? []).map((p) => [p.id, p]));
+      const lastByMatch = new Map<string, { content: string; sender_id: string; created_at: string }>();
+      for (const msg of msgs ?? []) {
+        if (!lastByMatch.has(msg.match_id)) {
+          lastByMatch.set(msg.match_id, {
+            content: msg.content,
+            sender_id: msg.sender_id,
+            created_at: msg.created_at,
+          });
+        }
+      }
       setMatches(
-        ms.map((m) => ({
-          ...m,
-          other: byId.get(m.user_a === user.id ? m.user_b : m.user_a) ?? null,
-        })),
+        ms.map((m) => {
+          const lastMessage = lastByMatch.get(m.id) ?? null;
+          const lastRead = m.user_a === user.id ? m.last_read_a : m.last_read_b;
+          const unread =
+            !!lastMessage &&
+            lastMessage.sender_id !== user.id &&
+            new Date(lastMessage.created_at) > new Date(lastRead);
+          return {
+            ...m,
+            other: byId.get(m.user_a === user.id ? m.user_b : m.user_a) ?? null,
+            lastMessage,
+            unread,
+          };
+        }),
       );
     };
     load();
@@ -63,6 +101,16 @@ function Matches() {
       .on(
         "postgres_changes",
         { event: "INSERT", schema: "public", table: "matches" },
+        () => load(),
+      )
+      .on(
+        "postgres_changes",
+        { event: "INSERT", schema: "public", table: "messages" },
+        () => load(),
+      )
+      .on(
+        "postgres_changes",
+        { event: "UPDATE", schema: "public", table: "matches" },
         () => load(),
       )
       .subscribe();
@@ -126,9 +174,21 @@ function Matches() {
                       {m.other?.role}
                     </span>
                   </div>
-                  <p className="text-xs text-muted-foreground">Tap to chat</p>
+                  <p
+                    className={`truncate text-xs ${
+                      m.unread ? "font-semibold text-foreground" : "text-muted-foreground"
+                    }`}
+                  >
+                    {m.lastMessage
+                      ? `${m.lastMessage.sender_id === user?.id ? "You: " : ""}${m.lastMessage.content}`
+                      : "Start a conversation"}
+                  </p>
                 </div>
-                <MessageCircle className="h-5 w-5 text-primary" />
+                {m.unread ? (
+                  <span className="h-2.5 w-2.5 shrink-0 rounded-full bg-destructive" />
+                ) : (
+                  <MessageCircle className="h-5 w-5 text-primary" />
+                )}
               </Link>
             ))}
           </div>
