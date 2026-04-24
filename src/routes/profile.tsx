@@ -101,6 +101,30 @@ function ProfilePage() {
     navigate({ to: "/" });
   };
 
+  const handleDelete = async () => {
+    setDeleting(true);
+    try {
+      const { data: sessionData } = await supabase.auth.getSession();
+      const token = sessionData.session?.access_token;
+      if (!token) {
+        toast.error("Not signed in");
+        setDeleting(false);
+        return;
+      }
+      const { error } = await supabase.functions.invoke("delete-account", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (error) throw error;
+      toast.success("Account deleted");
+      await signOut();
+      navigate({ to: "/auth", search: { mode: "signin" } });
+    } catch (e) {
+      toast.error((e as Error).message ?? "Failed to delete account");
+      setDeleting(false);
+      setConfirmDelete(false);
+    }
+  };
+
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file || !user) return;
