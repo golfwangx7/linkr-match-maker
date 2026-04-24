@@ -4,7 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
 import { BottomNav } from "@/components/BottomNav";
 import { SwipeCard, SwipeActions, type SwipeProfile } from "@/components/SwipeCard";
-import { Flame, Sparkles, SlidersHorizontal, X } from "lucide-react";
+import { Flame, Sparkles, SlidersHorizontal, X, Undo2 } from "lucide-react";
 import { toast } from "sonner";
 import { CATEGORIES } from "@/lib/categories";
 
@@ -30,6 +30,8 @@ function Feed() {
   const [matchModal, setMatchModal] = useState<SwipeProfile | null>(null);
   const [filterOpen, setFilterOpen] = useState(false);
   const [filters, setFilters] = useState<Filters>(EMPTY_FILTERS);
+  const [lastSwipe, setLastSwipe] = useState<{ profile: SwipeProfile; swipeId: string } | null>(null);
+  const [undoing, setUndoing] = useState(false);
 
   useEffect(() => {
     if (!authLoading && !user) navigate({ to: "/auth", search: { mode: "signin" } });
@@ -98,14 +100,21 @@ function Feed() {
     const target = filtered[filtered.length - 1];
     setProfiles((p) => (p ? p.filter((x) => x.id !== target.id) : []));
 
-    const { error } = await supabase.from("swipes").insert({
-      swiper_id: user.id,
-      swiped_id: target.id,
-      direction: dir,
-    });
+    const { data: inserted, error } = await supabase
+      .from("swipes")
+      .insert({
+        swiper_id: user.id,
+        swiped_id: target.id,
+        direction: dir,
+      })
+      .select("id")
+      .maybeSingle();
     if (error) {
       toast.error(error.message);
       return;
+    }
+    if (inserted) {
+      setLastSwipe({ profile: target, swipeId: inserted.id });
     }
 
     if (dir === "like") {
@@ -118,6 +127,30 @@ function Feed() {
         .maybeSingle();
       if (match) setMatchModal(target);
     }
+  };
+
+  const handleUndo = async () => {
+    if (!user || !lastSwipe || undoing) return;
+    setUndoing(true);
+    const { profile, swipeId } = lastSwipe;
+    const { error } = await supabase.from("swipes").delete().eq("id", swipeId);
+    if (error) {
+      toast.error(error.message);
+      setUndoing(false);
+      return;
+    }
+    // If a match was created from this swipe, remove it too.
+    await supabase
+      .from("matches")
+      .delete()
+      .or(
+        `and(user_a.eq.${user.id},user_b.eq.${profile.id}),and(user_a.eq.${profile.id},user_b.eq.${user.id})`,
+      );
+    setProfiles((p) => (p ? [...p, profile] : [profile]));
+    setMatchModal((m) => (m && m.id === profile.id ? null : m));
+    setLastSwipe(null);
+    setUndoing(false);
+    toast.success("Swipe undone");
   };
 
   if (authLoading || profiles === null || filtered === null) {
