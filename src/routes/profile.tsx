@@ -136,23 +136,22 @@ function ProfilePage() {
   return (
     <div className="min-h-screen bg-background pb-28">
       <header className="px-5 pt-12 pb-4">
-        <div className="flex items-center justify-between gap-3">
-          <h1 className="text-3xl font-bold">Profile</h1>
+        <div className="flex items-center justify-between gap-2">
+          <h1 className="truncate text-2xl font-bold sm:text-3xl">Profile</h1>
           <div className="flex shrink-0 items-center gap-2">
             <button
               onClick={handleSignOut}
-              aria-label="Sign out"
               className="flex h-10 items-center gap-1.5 rounded-full border border-border bg-card px-3 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground"
             >
               <LogOut className="h-4 w-4" />
-              <span className="hidden sm:inline">Sign out</span>
+              <span>Sign out</span>
             </button>
             <Link
               to="/settings"
-              aria-label="Settings"
-              className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full border border-border bg-card text-foreground shadow-sm transition-all hover:border-primary hover:text-primary active:scale-95"
+              className="flex h-10 items-center gap-1.5 rounded-full border border-border bg-card px-3 text-xs font-medium text-foreground shadow-sm transition-all hover:border-primary hover:text-primary active:scale-95"
             >
-              <Settings className="h-5 w-5" />
+              <Settings className="h-4 w-4" />
+              <span>Settings</span>
             </Link>
           </div>
         </div>
