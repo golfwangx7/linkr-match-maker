@@ -82,6 +82,22 @@ function AuthPage() {
     }
   };
 
+  const handleForgot = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setForgotLoading(true);
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(forgotEmail, {
+        redirectTo: `${window.location.origin}/reset-password`,
+      });
+      if (error) throw error;
+      setForgotSent(true);
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Could not send reset email");
+    } finally {
+      setForgotLoading(false);
+    }
+  };
+
   return (
     <div className="flex min-h-screen flex-col bg-gradient-hero px-6">
       <div className="mx-auto w-full max-w-md flex-1 pt-12">
