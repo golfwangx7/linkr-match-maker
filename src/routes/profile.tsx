@@ -29,6 +29,8 @@ function ProfilePage() {
   const navigate = useNavigate();
   const [p, setP] = useState<Profile | null>(null);
   const [saving, setSaving] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (!loading && !user) navigate({ to: "/auth", search: { mode: "signin" } });
