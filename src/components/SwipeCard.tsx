@@ -86,6 +86,23 @@ export function SwipeCard({
           NOPE
         </motion.div>
 
+        {/* Prominent opportunity hook */}
+        <div className="absolute left-5 right-5 top-5 flex">
+          <div className="inline-flex max-w-full items-center gap-1.5 rounded-full bg-gradient-primary px-3.5 py-1.5 text-xs font-bold uppercase tracking-wide text-primary-foreground shadow-glow">
+            {profile.role === "brand" ? (
+              <>
+                <Sparkles className="h-3.5 w-3.5 shrink-0" />
+                <span className="truncate">Looking for UGC creators</span>
+              </>
+            ) : (
+              <>
+                <DollarSign className="h-3.5 w-3.5 shrink-0" />
+                <span className="truncate">Open to paid collabs</span>
+              </>
+            )}
+          </div>
+        </div>
+
         <div className="absolute inset-x-0 bottom-0 p-6 text-white">
           <div className="mb-2 inline-flex rounded-full bg-white/15 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider backdrop-blur">
             {profile.role}
