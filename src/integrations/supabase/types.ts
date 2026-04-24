@@ -77,8 +77,10 @@ export type Database = {
         Row: {
           bio: string | null
           categories: string[] | null
+          country: string | null
           created_at: string
           display_name: string | null
+          gender: string | null
           id: string
           image_url: string | null
           instagram: string | null
@@ -90,8 +92,10 @@ export type Database = {
         Insert: {
           bio?: string | null
           categories?: string[] | null
+          country?: string | null
           created_at?: string
           display_name?: string | null
+          gender?: string | null
           id: string
           image_url?: string | null
           instagram?: string | null
@@ -103,8 +107,10 @@ export type Database = {
         Update: {
           bio?: string | null
           categories?: string[] | null
+          country?: string | null
           created_at?: string
           display_name?: string | null
+          gender?: string | null
           id?: string
           image_url?: string | null
           instagram?: string | null

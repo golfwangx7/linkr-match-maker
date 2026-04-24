@@ -1,22 +1,35 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useMemo, useState, useCallback } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
 import { BottomNav } from "@/components/BottomNav";
 import { SwipeCard, SwipeActions, type SwipeProfile } from "@/components/SwipeCard";
-import { Flame, Sparkles } from "lucide-react";
+import { Flame, Sparkles, SlidersHorizontal, X } from "lucide-react";
 import { toast } from "sonner";
+import { CATEGORIES } from "@/lib/categories";
 
 export const Route = createFileRoute("/feed")({
   component: Feed,
 });
 
+type Gender = "Male" | "Female" | "Diverse";
+const GENDERS: Gender[] = ["Male", "Female", "Diverse"];
+
+type Filters = {
+  country: string;
+  genders: Gender[];
+  categories: string[];
+};
+
+const EMPTY_FILTERS: Filters = { country: "", genders: [], categories: [] };
+
 function Feed() {
   const { user, loading: authLoading } = useAuth();
   const navigate = useNavigate();
   const [profiles, setProfiles] = useState<SwipeProfile[] | null>(null);
-  const [myRole, setMyRole] = useState<"creator" | "brand" | null>(null);
   const [matchModal, setMatchModal] = useState<SwipeProfile | null>(null);
+  const [filterOpen, setFilterOpen] = useState(false);
+  const [filters, setFilters] = useState<Filters>(EMPTY_FILTERS);
 
   useEffect(() => {
     if (!authLoading && !user) navigate({ to: "/auth", search: { mode: "signin" } });
@@ -33,7 +46,6 @@ function Feed() {
       navigate({ to: "/onboarding" });
       return;
     }
-    setMyRole(me.role);
     const oppositeRole = me.role === "creator" ? "brand" : "creator";
 
     const { data: swiped } = await supabase
@@ -65,10 +77,26 @@ function Feed() {
     if (user) loadFeed();
   }, [user, loadFeed]);
 
+  const filtered = useMemo(() => {
+    if (!profiles) return null;
+    const country = filters.country.trim().toLowerCase();
+    return profiles.filter((p) => {
+      const anyP = p as SwipeProfile & { country?: string | null; gender?: string | null };
+      if (country && (anyP.country ?? "").toLowerCase() !== country) return false;
+      if (filters.genders.length > 0 && !filters.genders.includes(anyP.gender as Gender))
+        return false;
+      if (filters.categories.length > 0) {
+        const cats = p.categories ?? [];
+        if (!filters.categories.some((c) => cats.includes(c))) return false;
+      }
+      return true;
+    });
+  }, [profiles, filters]);
+
   const handleSwipe = async (dir: "like" | "skip") => {
-    if (!user || !profiles || profiles.length === 0) return;
-    const target = profiles[profiles.length - 1];
-    setProfiles((p) => p?.slice(0, -1) ?? []);
+    if (!user || !filtered || filtered.length === 0) return;
+    const target = filtered[filtered.length - 1];
+    setProfiles((p) => (p ? p.filter((x) => x.id !== target.id) : []));
 
     const { error } = await supabase.from("swipes").insert({
       swiper_id: user.id,
@@ -81,7 +109,6 @@ function Feed() {
     }
 
     if (dir === "like") {
-      // Check if a match was just created
       const { data: match } = await supabase
         .from("matches")
         .select("id")
@@ -93,7 +120,7 @@ function Feed() {
     }
   };
 
-  if (authLoading || profiles === null) {
+  if (authLoading || profiles === null || filtered === null) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-background">
         <Flame className="h-8 w-8 animate-pulse text-primary" />
@@ -101,8 +128,10 @@ function Feed() {
     );
   }
 
-  const top = profiles[profiles.length - 1];
-  const visible = profiles.slice(-3);
+  const top = filtered[filtered.length - 1];
+  const visible = filtered.slice(-3);
+  const activeFilterCount =
+    (filters.country.trim() ? 1 : 0) + filters.genders.length + filters.categories.length;
 
   return (
     <div className="flex min-h-screen flex-col bg-background pb-24">
@@ -113,15 +142,24 @@ function Feed() {
           </div>
           <span className="text-lg font-bold">Linkr</span>
         </div>
-        <span className="text-xs uppercase tracking-wider text-muted-foreground">
-          Browsing {myRole === "creator" ? "brands" : "creators"}
-        </span>
+        <button
+          onClick={() => setFilterOpen(true)}
+          aria-label="Filters"
+          className="relative flex h-10 w-10 items-center justify-center rounded-full border border-border bg-card transition-transform active:scale-90"
+        >
+          <SlidersHorizontal className="h-4.5 w-4.5" />
+          {activeFilterCount > 0 && (
+            <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-gradient-primary px-1 text-[10px] font-bold text-primary-foreground shadow-glow">
+              {activeFilterCount}
+            </span>
+          )}
+        </button>
       </header>
 
       <main className="mx-auto flex w-full max-w-md flex-1 flex-col px-5">
         <div className="relative aspect-[3/4] w-full">
-          {profiles.length === 0 ? (
-            <EmptyState />
+          {filtered.length === 0 ? (
+            <EmptyState hasFilters={activeFilterCount > 0} onClear={() => setFilters(EMPTY_FILTERS)} />
           ) : (
             visible.map((p, i) => (
               <SwipeCard
@@ -147,19 +185,171 @@ function Feed() {
         <MatchModal profile={matchModal} onClose={() => setMatchModal(null)} />
       )}
 
+      {filterOpen && (
+        <FilterSheet
+          value={filters}
+          onApply={(f) => {
+            setFilters(f);
+            setFilterOpen(false);
+          }}
+          onClose={() => setFilterOpen(false)}
+        />
+      )}
+
       <BottomNav />
     </div>
   );
 }
 
-function EmptyState() {
+function EmptyState({ hasFilters, onClear }: { hasFilters: boolean; onClear: () => void }) {
   return (
     <div className="flex h-full w-full flex-col items-center justify-center rounded-3xl border border-border bg-gradient-card p-8 text-center">
       <Sparkles className="h-10 w-10 text-primary" />
-      <h3 className="mt-4 text-xl font-bold">You're all caught up</h3>
+      <h3 className="mt-4 text-xl font-bold">
+        {hasFilters ? "No matches for these filters" : "You're all caught up"}
+      </h3>
       <p className="mt-2 text-sm text-muted-foreground">
-        Check back soon — new profiles join Linkr every day.
+        {hasFilters
+          ? "Try removing a filter to see more profiles."
+          : "Check back soon — new profiles join Linkr every day."}
       </p>
+      {hasFilters && (
+        <button
+          onClick={onClear}
+          className="mt-5 rounded-full bg-gradient-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-glow"
+        >
+          Clear filters
+        </button>
+      )}
+    </div>
+  );
+}
+
+function FilterSheet({
+  value,
+  onApply,
+  onClose,
+}: {
+  value: Filters;
+  onApply: (f: Filters) => void;
+  onClose: () => void;
+}) {
+  const [draft, setDraft] = useState<Filters>(value);
+
+  const toggleGender = (g: Gender) =>
+    setDraft((d) => ({
+      ...d,
+      genders: d.genders.includes(g) ? d.genders.filter((x) => x !== g) : [...d.genders, g],
+    }));
+
+  const toggleCat = (c: string) =>
+    setDraft((d) => ({
+      ...d,
+      categories: d.categories.includes(c)
+        ? d.categories.filter((x) => x !== c)
+        : [...d.categories, c],
+    }));
+
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-end justify-center bg-black/70 backdrop-blur-sm sm:items-center"
+      onClick={onClose}
+    >
+      <div
+        className="w-full max-w-md rounded-t-3xl bg-background p-6 pb-[max(1.5rem,env(safe-area-inset-bottom))] shadow-glow sm:rounded-3xl"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="mx-auto mb-4 h-1.5 w-10 rounded-full bg-muted sm:hidden" />
+        <div className="flex items-center justify-between">
+          <h2 className="text-xl font-bold">Filters</h2>
+          <button
+            onClick={onClose}
+            aria-label="Close"
+            className="flex h-9 w-9 items-center justify-center rounded-full border border-border active:bg-muted"
+          >
+            <X className="h-4 w-4" />
+          </button>
+        </div>
+
+        <div className="mt-6 space-y-6">
+          <div>
+            <label className="mb-2 block text-xs font-medium uppercase tracking-wider text-muted-foreground">
+              Country
+            </label>
+            <input
+              value={draft.country}
+              onChange={(e) => setDraft({ ...draft, country: e.target.value })}
+              placeholder="e.g. Germany"
+              className="h-12 w-full rounded-2xl border border-border bg-card px-4 text-sm outline-none focus:border-primary"
+            />
+          </div>
+
+          <div>
+            <label className="mb-2 block text-xs font-medium uppercase tracking-wider text-muted-foreground">
+              Gender
+            </label>
+            <div className="flex flex-wrap gap-2">
+              {GENDERS.map((g) => {
+                const active = draft.genders.includes(g);
+                return (
+                  <button
+                    key={g}
+                    type="button"
+                    onClick={() => toggleGender(g)}
+                    className={`rounded-full border px-4 py-2 text-sm font-medium transition-all ${
+                      active
+                        ? "border-transparent bg-gradient-primary text-primary-foreground shadow-glow"
+                        : "border-border bg-card text-foreground"
+                    }`}
+                  >
+                    {g}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+
+          <div>
+            <label className="mb-2 block text-xs font-medium uppercase tracking-wider text-muted-foreground">
+              Categories
+            </label>
+            <div className="flex flex-wrap gap-2">
+              {CATEGORIES.map((c) => {
+                const active = draft.categories.includes(c);
+                return (
+                  <button
+                    key={c}
+                    type="button"
+                    onClick={() => toggleCat(c)}
+                    className={`rounded-full border px-4 py-2 text-sm font-medium transition-all ${
+                      active
+                        ? "border-transparent bg-gradient-primary text-primary-foreground shadow-glow"
+                        : "border-border bg-card text-foreground"
+                    }`}
+                  >
+                    {c}
+                  </button>
+                );
+              })}
+            </div>
+          </div>
+        </div>
+
+        <div className="mt-8 flex gap-3">
+          <button
+            onClick={() => setDraft(EMPTY_FILTERS)}
+            className="flex h-12 flex-1 items-center justify-center rounded-full border border-border bg-card text-sm font-semibold"
+          >
+            Reset
+          </button>
+          <button
+            onClick={() => onApply(draft)}
+            className="flex h-12 flex-[2] items-center justify-center rounded-full bg-gradient-primary text-sm font-semibold text-primary-foreground shadow-glow"
+          >
+            Apply filters
+          </button>
+        </div>
+      </div>
     </div>
   );
 }
