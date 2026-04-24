@@ -9,7 +9,9 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
+import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as ProfileRouteImport } from './routes/profile'
+import { Route as PrivacyRouteImport } from './routes/privacy'
 import { Route as OnboardingRouteImport } from './routes/onboarding'
 import { Route as MatchesRouteImport } from './routes/matches'
 import { Route as FeedRouteImport } from './routes/feed'
@@ -18,9 +20,19 @@ import { Route as IndexRouteImport } from './routes/index'
 import { Route as UIdRouteImport } from './routes/u.$id'
 import { Route as ChatMatchIdRouteImport } from './routes/chat.$matchId'
 
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const ProfileRoute = ProfileRouteImport.update({
   id: '/profile',
   path: '/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const PrivacyRoute = PrivacyRouteImport.update({
+  id: '/privacy',
+  path: '/privacy',
   getParentRoute: () => rootRouteImport,
 } as any)
 const OnboardingRoute = OnboardingRouteImport.update({
@@ -65,7 +77,9 @@ export interface FileRoutesByFullPath {
   '/feed': typeof FeedRoute
   '/matches': typeof MatchesRoute
   '/onboarding': typeof OnboardingRoute
+  '/privacy': typeof PrivacyRoute
   '/profile': typeof ProfileRoute
+  '/settings': typeof SettingsRoute
   '/chat/$matchId': typeof ChatMatchIdRoute
   '/u/$id': typeof UIdRoute
 }
@@ -75,7 +89,9 @@ export interface FileRoutesByTo {
   '/feed': typeof FeedRoute
   '/matches': typeof MatchesRoute
   '/onboarding': typeof OnboardingRoute
+  '/privacy': typeof PrivacyRoute
   '/profile': typeof ProfileRoute
+  '/settings': typeof SettingsRoute
   '/chat/$matchId': typeof ChatMatchIdRoute
   '/u/$id': typeof UIdRoute
 }
@@ -86,7 +102,9 @@ export interface FileRoutesById {
   '/feed': typeof FeedRoute
   '/matches': typeof MatchesRoute
   '/onboarding': typeof OnboardingRoute
+  '/privacy': typeof PrivacyRoute
   '/profile': typeof ProfileRoute
+  '/settings': typeof SettingsRoute
   '/chat/$matchId': typeof ChatMatchIdRoute
   '/u/$id': typeof UIdRoute
 }
@@ -98,7 +116,9 @@ export interface FileRouteTypes {
     | '/feed'
     | '/matches'
     | '/onboarding'
+    | '/privacy'
     | '/profile'
+    | '/settings'
     | '/chat/$matchId'
     | '/u/$id'
   fileRoutesByTo: FileRoutesByTo
@@ -108,7 +128,9 @@ export interface FileRouteTypes {
     | '/feed'
     | '/matches'
     | '/onboarding'
+    | '/privacy'
     | '/profile'
+    | '/settings'
     | '/chat/$matchId'
     | '/u/$id'
   id:
@@ -118,7 +140,9 @@ export interface FileRouteTypes {
     | '/feed'
     | '/matches'
     | '/onboarding'
+    | '/privacy'
     | '/profile'
+    | '/settings'
     | '/chat/$matchId'
     | '/u/$id'
   fileRoutesById: FileRoutesById
@@ -129,18 +153,34 @@ export interface RootRouteChildren {
   FeedRoute: typeof FeedRoute
   MatchesRoute: typeof MatchesRoute
   OnboardingRoute: typeof OnboardingRoute
+  PrivacyRoute: typeof PrivacyRoute
   ProfileRoute: typeof ProfileRoute
+  SettingsRoute: typeof SettingsRoute
   ChatMatchIdRoute: typeof ChatMatchIdRoute
   UIdRoute: typeof UIdRoute
 }
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/profile': {
       id: '/profile'
       path: '/profile'
       fullPath: '/profile'
       preLoaderRoute: typeof ProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/privacy': {
+      id: '/privacy'
+      path: '/privacy'
+      fullPath: '/privacy'
+      preLoaderRoute: typeof PrivacyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/onboarding': {
@@ -201,10 +241,21 @@ const rootRouteChildren: RootRouteChildren = {
   FeedRoute: FeedRoute,
   MatchesRoute: MatchesRoute,
   OnboardingRoute: OnboardingRoute,
+  PrivacyRoute: PrivacyRoute,
   ProfileRoute: ProfileRoute,
+  SettingsRoute: SettingsRoute,
   ChatMatchIdRoute: ChatMatchIdRoute,
   UIdRoute: UIdRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
   ._addFileTypes<FileRouteTypes>()
+
+import type { getRouter } from './router.tsx'
+import type { createStart } from '@tanstack/react-start'
+declare module '@tanstack/react-start' {
+  interface Register {
+    ssr: true
+    router: Awaited<ReturnType<typeof getRouter>>
+  }
+}
