@@ -146,11 +146,11 @@ function ProfileDetail() {
           </section>
         )}
 
-        {(profile.instagram || profile.tiktok) && (
-          <section className="mt-7">
-            <h2 className="mb-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              {isCreator ? "Socials" : "Connect"}
-            </h2>
+        <section className="mt-7">
+          <h2 className="mb-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+            {isCreator ? "Socials" : "Connect"}
+          </h2>
+          {profile.instagram || profile.tiktok ? (
             <div className="space-y-2">
               {profile.instagram && (
                 <SocialRow
@@ -169,8 +169,12 @@ function ProfileDetail() {
                 />
               )}
             </div>
-          </section>
-        )}
+          ) : (
+            <p className="rounded-2xl border border-dashed border-border bg-card/50 px-4 py-3 text-sm text-muted-foreground">
+              No social links yet
+            </p>
+          )}
+        </section>
       </main>
     </div>
   )
