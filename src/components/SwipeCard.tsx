@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Link } from "@tanstack/react-router";
+import { useRef, useState } from "react";
+import { useNavigate } from "@tanstack/react-router";
 import { motion, useMotionValue, useTransform, type PanInfo } from "framer-motion";
 import { Heart, X, Instagram, Music2, Tag, Sparkles, DollarSign, Info } from "lucide-react";
 
@@ -31,6 +31,8 @@ export function SwipeCard({
   const likeOpacity = useTransform(x, [20, 120], [0, 1]);
   const skipOpacity = useTransform(x, [-120, -20], [1, 0]);
   const [exitX, setExitX] = useState(0);
+  const navigate = useNavigate();
+  const pointerStart = useRef<{ x: number; y: number; t: number } | null>(null);
 
   const handleEnd = (_: unknown, info: PanInfo) => {
     if (info.offset.x > 120) {
@@ -39,6 +41,23 @@ export function SwipeCard({
     } else if (info.offset.x < -120) {
       setExitX(-400);
       onSwipe("skip");
+    }
+  };
+
+  const handlePointerDown = (e: React.PointerEvent) => {
+    pointerStart.current = { x: e.clientX, y: e.clientY, t: Date.now() };
+  };
+
+  const handlePointerUp = (e: React.PointerEvent) => {
+    const start = pointerStart.current;
+    pointerStart.current = null;
+    if (!start || !active) return;
+    const dx = Math.abs(e.clientX - start.x);
+    const dy = Math.abs(e.clientY - start.y);
+    const dt = Date.now() - start.t;
+    // Treat as tap: small movement and short duration
+    if (dx < 8 && dy < 8 && dt < 300) {
+      navigate({ to: "/u/$id", params: { id: profile.id } });
     }
   };
 
