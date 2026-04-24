@@ -34,9 +34,13 @@ export function useUnreadMatchesCount() {
       for (const m of ms) {
         const lastRead =
           m.user_a === user.id ? m.last_read_a : m.last_read_b;
-        const latestOther = (msgs ?? []).find(
-          (x) => x.match_id === m.id && x.sender_id !== user.id,
-        );
+        const matchMsgs = (msgs ?? []).filter((x) => x.match_id === m.id);
+        if (matchMsgs.length === 0) {
+          // Brand-new match with no conversation yet → counts as new activity.
+          unread++;
+          continue;
+        }
+        const latestOther = matchMsgs.find((x) => x.sender_id !== user.id);
         if (latestOther && new Date(latestOther.created_at) > new Date(lastRead)) {
           unread++;
         }
