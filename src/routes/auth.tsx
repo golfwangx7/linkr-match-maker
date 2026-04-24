@@ -22,6 +22,10 @@ function AuthPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
+  const [forgotOpen, setForgotOpen] = useState(false);
+  const [forgotEmail, setForgotEmail] = useState("");
+  const [forgotSent, setForgotSent] = useState(false);
+  const [forgotLoading, setForgotLoading] = useState(false);
 
   useEffect(() => {
     if (!authLoading && user) {
@@ -78,6 +82,22 @@ function AuthPage() {
     }
   };
 
+  const handleForgot = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setForgotLoading(true);
+    try {
+      const { error } = await supabase.auth.resetPasswordForEmail(forgotEmail, {
+        redirectTo: `${window.location.origin}/reset-password`,
+      });
+      if (error) throw error;
+      setForgotSent(true);
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Could not send reset email");
+    } finally {
+      setForgotLoading(false);
+    }
+  };
+
   return (
     <div className="flex min-h-screen flex-col bg-gradient-hero px-6">
       <div className="mx-auto w-full max-w-md flex-1 pt-12">
@@ -116,9 +136,24 @@ function AuthPage() {
             />
           </div>
           <div>
-            <label className="mb-1.5 block text-xs font-medium uppercase tracking-wider text-muted-foreground">
-              Password
-            </label>
+            <div className="mb-1.5 flex items-center justify-between">
+              <label className="block text-xs font-medium uppercase tracking-wider text-muted-foreground">
+                Password
+              </label>
+              {mode === "signin" && (
+                <button
+                  type="button"
+                  onClick={() => {
+                    setForgotEmail(email);
+                    setForgotSent(false);
+                    setForgotOpen(true);
+                  }}
+                  className="text-xs font-semibold text-primary hover:underline"
+                >
+                  Forgot password?
+                </button>
+              )}
+            </div>
             <input
               type="password"
               required
@@ -138,6 +173,59 @@ function AuthPage() {
             {loading ? "Please wait…" : mode === "signup" ? "Create account" : "Sign in"}
           </button>
         </form>
+
+        {forgotOpen && mode === "signin" && (
+          <div className="mt-6 rounded-2xl border border-border bg-card p-4">
+            {forgotSent ? (
+              <div className="space-y-3 text-sm">
+                <p className="font-semibold">Check your email</p>
+                <p className="text-muted-foreground">
+                  If an account exists for <span className="text-foreground">{forgotEmail}</span>,
+                  we&apos;ve sent a link to reset your password.
+                </p>
+                <button
+                  type="button"
+                  onClick={() => setForgotOpen(false)}
+                  className="text-xs font-semibold text-primary hover:underline"
+                >
+                  Close
+                </button>
+              </div>
+            ) : (
+              <form onSubmit={handleForgot} className="space-y-3">
+                <div>
+                  <label className="mb-1.5 block text-xs font-medium uppercase tracking-wider text-muted-foreground">
+                    Reset password
+                  </label>
+                  <input
+                    type="email"
+                    required
+                    value={forgotEmail}
+                    onChange={(e) => setForgotEmail(e.target.value)}
+                    placeholder="you@example.com"
+                    className="h-12 w-full rounded-xl border border-border bg-background px-4 text-sm outline-none transition-colors focus:border-primary"
+                  />
+                </div>
+                <div className="flex items-center gap-2">
+                  <button
+                    type="submit"
+                    disabled={forgotLoading}
+                    className="flex h-10 flex-1 items-center justify-center rounded-full bg-primary text-sm font-semibold text-primary-foreground transition-transform active:scale-[0.98] disabled:opacity-60"
+                  >
+                    {forgotLoading ? "Sending…" : "Send reset link"}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setForgotOpen(false)}
+                    className="h-10 px-4 text-xs font-semibold text-muted-foreground hover:text-foreground"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </form>
+            )}
+          </div>
+        )}
 
         <div className="mt-6 flex items-center gap-3">
           <div className="h-px flex-1 bg-border" />
