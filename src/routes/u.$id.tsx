@@ -146,10 +146,10 @@ function ProfileDetail() {
           </section>
         )}
 
-        {isCreator && (profile.instagram || profile.tiktok) && (
+        {(profile.instagram || profile.tiktok) && (
           <section className="mt-7">
             <h2 className="mb-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
-              Socials
+              {isCreator ? "Socials" : "Connect"}
             </h2>
             <div className="space-y-2">
               {profile.instagram && (
