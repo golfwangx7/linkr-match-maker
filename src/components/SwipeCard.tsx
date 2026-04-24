@@ -68,11 +68,13 @@ export function SwipeCard({
 
   return (
     <motion.div
-      className="absolute inset-0"
+      className="absolute inset-0 cursor-pointer"
       drag={active ? "x" : false}
       dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }}
       style={{ x, rotate, zIndex: 10 - index }}
       onDragEnd={handleEnd}
+      onPointerDown={handlePointerDown}
+      onPointerUp={handlePointerUp}
       animate={
         exitX
           ? { x: exitX, opacity: 0, transition: { duration: 0.3 } }
@@ -161,16 +163,10 @@ export function SwipeCard({
           )}
 
           {active && (
-            <Link
-              to="/profile/$id"
-              params={{ id: profile.id }}
-              onPointerDown={(e) => e.stopPropagation()}
-              onClick={(e) => e.stopPropagation()}
-              className="mt-4 inline-flex items-center gap-1.5 rounded-full bg-white/15 px-3.5 py-2 text-xs font-semibold text-white backdrop-blur transition-colors hover:bg-white/25"
-            >
+            <div className="mt-4 inline-flex items-center gap-1.5 rounded-full bg-white/15 px-3.5 py-2 text-xs font-semibold text-white backdrop-blur">
               <Info className="h-3.5 w-3.5" />
-              View full profile
-            </Link>
+              Tap to view profile
+            </div>
           )}
         </div>
       </div>
