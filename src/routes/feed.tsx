@@ -54,7 +54,11 @@ function Feed() {
       toast.error(error.message);
       return;
     }
-    setProfiles((data ?? []).filter((p) => !excluded.has(p.id)).reverse());
+    setProfiles(
+      (data ?? [])
+        .filter((p) => !excluded.has(p.id))
+        .reverse() as SwipeProfile[],
+    );
   }, [user, navigate]);
 
   useEffect(() => {
