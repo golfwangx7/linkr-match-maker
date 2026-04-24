@@ -1,13 +1,30 @@
 import { createFileRoute, useNavigate } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
 import { BottomNav } from "@/components/BottomNav";
 import { CATEGORIES } from "@/lib/categories";
-import { LogOut, Save, Upload, Loader2, Settings } from "lucide-react";
-import { Link } from "@tanstack/react-router";
+import {
+  LogOut,
+  Save,
+  Upload,
+  Loader2,
+  Shield,
+  Mail,
+  Trash2,
+  ChevronDown,
+} from "lucide-react";
 import { toast } from "sonner";
-import { useRef } from "react";
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 type Profile = {
   id: string;
