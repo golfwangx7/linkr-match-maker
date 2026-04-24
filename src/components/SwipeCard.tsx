@@ -140,6 +140,19 @@ export function SwipeCard({
               )}
             </div>
           )}
+
+          {active && (
+            <Link
+              to="/profile/$id"
+              params={{ id: profile.id }}
+              onPointerDown={(e) => e.stopPropagation()}
+              onClick={(e) => e.stopPropagation()}
+              className="mt-4 inline-flex items-center gap-1.5 rounded-full bg-white/15 px-3.5 py-2 text-xs font-semibold text-white backdrop-blur transition-colors hover:bg-white/25"
+            >
+              <Info className="h-3.5 w-3.5" />
+              View full profile
+            </Link>
+          )}
         </div>
       </div>
     </motion.div>
