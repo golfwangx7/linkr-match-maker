@@ -76,8 +76,14 @@ function RootShell({ children }: { children: React.ReactNode }) {
 function RootComponent() {
   return (
     <AuthProvider>
+      <NotificationsBridge />
       <Outlet />
       <Toaster />
     </AuthProvider>
   );
+}
+
+function NotificationsBridge() {
+  useNotifications();
+  return null;
 }
