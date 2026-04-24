@@ -125,6 +125,8 @@ function ProfilePage() {
     update("image_url", publicUrl);
     toast.success("Image uploaded");
   };
+
+  if (!p) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-background">
         <div className="text-sm text-muted-foreground">Loading…</div>
