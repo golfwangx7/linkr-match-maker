@@ -134,7 +134,7 @@ function ProfilePage() {
   const isCreator = p.role === "creator";
 
   return (
-    <div className="min-h-screen bg-background pb-28">
+    <div className="min-h-screen bg-background pb-40">
       <header className="px-5 pt-12 pb-4">
         <div className="flex items-center justify-between gap-2">
           <h1 className="truncate text-2xl font-bold sm:text-3xl">Profile</h1>
