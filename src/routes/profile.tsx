@@ -9,23 +9,9 @@ import {
   Save,
   Upload,
   Loader2,
-  Shield,
-  Mail,
-  Trash2,
-  ChevronDown,
   Settings,
 } from "lucide-react";
 import { toast } from "sonner";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
 
 type Profile = {
   id: string;
