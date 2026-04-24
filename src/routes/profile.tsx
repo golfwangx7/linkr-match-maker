@@ -80,7 +80,51 @@ function ProfilePage() {
     navigate({ to: "/" });
   };
 
-  if (!p) {
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !user) return;
+
+    if (!file.type.startsWith("image/")) {
+      toast.error("Please select an image file");
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error("Image must be smaller than 5MB");
+      return;
+    }
+
+    setUploading(true);
+    const ext = file.name.split(".").pop() ?? "jpg";
+    const path = `${user.id}/${Date.now()}.${ext}`;
+
+    const { error: upErr } = await supabase.storage
+      .from("profile-images")
+      .upload(path, file, { upsert: true, contentType: file.type });
+
+    if (upErr) {
+      setUploading(false);
+      toast.error(upErr.message);
+      return;
+    }
+
+    const { data: urlData } = supabase.storage.from("profile-images").getPublicUrl(path);
+    const publicUrl = urlData.publicUrl;
+
+    const { error: updErr } = await supabase
+      .from("profiles")
+      .update({ image_url: publicUrl })
+      .eq("id", user.id);
+
+    setUploading(false);
+
+    if (updErr) {
+      toast.error(updErr.message);
+      return;
+    }
+
+    update("image_url", publicUrl);
+    toast.success("Image uploaded");
+  };
     return (
       <div className="flex min-h-screen items-center justify-center bg-background">
         <div className="text-sm text-muted-foreground">Loading…</div>
