@@ -332,13 +332,96 @@ function ProfilePage() {
           {saving ? "Saving…" : "Save changes"}
         </button>
 
-        <Link
-          to="/settings"
-          className="mt-3 flex h-14 w-full items-center justify-center gap-2 rounded-full border border-border bg-card text-base font-semibold text-foreground transition-all hover:border-primary hover:text-primary active:scale-[0.98]"
-        >
-          <Settings className="h-5 w-5" />
-          Settings
-        </Link>
+        <section className="mt-10">
+          <h2 className="mb-3 px-1 text-xs font-medium uppercase tracking-wider text-muted-foreground">
+            Settings
+          </h2>
+          <div className="overflow-hidden rounded-2xl border border-border bg-card">
+            <button
+              type="button"
+              onClick={() => setShowPrivacy((v) => !v)}
+              className="flex w-full items-center gap-3 px-4 py-4 text-left transition-colors hover:bg-muted/40"
+            >
+              <Shield className="h-5 w-5 text-primary" />
+              <span className="flex-1 text-sm font-medium">Privacy Policy</span>
+              <ChevronDown
+                className={`h-4 w-4 text-muted-foreground transition-transform ${showPrivacy ? "rotate-180" : ""}`}
+              />
+            </button>
+            {showPrivacy && (
+              <div className="space-y-3 border-t border-border bg-muted/20 px-4 py-4 text-xs leading-relaxed text-muted-foreground">
+                <p>
+                  We store the information you provide while using Linkr — your profile details,
+                  swipes, matches, and messages — to operate the app.
+                </p>
+                <p>
+                  Your data is used solely to provide the service: showing your profile to
+                  potential matches, surfacing relevant creators and brands, and enabling
+                  messaging between matched users.
+                </p>
+                <p>We do not sell your personal data to third parties.</p>
+                <p>
+                  You can delete your account and all associated data at any time below.
+                </p>
+              </div>
+            )}
+
+            <div className="flex items-center gap-3 border-t border-border px-4 py-4">
+              <Mail className="h-5 w-5 text-primary" />
+              <div className="min-w-0 flex-1">
+                <div className="text-sm font-medium">Support</div>
+                <a
+                  href="mailto:linkr.support@gmail.com"
+                  className="block truncate text-xs text-primary underline-offset-4 hover:underline"
+                >
+                  linkr.support@gmail.com
+                </a>
+              </div>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => setConfirmDelete(true)}
+              className="flex w-full items-center gap-3 border-t border-border px-4 py-4 text-left transition-colors hover:bg-destructive/10"
+            >
+              <Trash2 className="h-5 w-5 text-destructive" />
+              <span className="flex-1 text-sm font-medium text-destructive">
+                Delete account
+              </span>
+            </button>
+          </div>
+        </section>
+
+        <AlertDialog open={confirmDelete} onOpenChange={setConfirmDelete}>
+          <AlertDialogContent>
+            <AlertDialogHeader>
+              <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+              <AlertDialogDescription>
+                This will permanently delete your profile, matches, and messages.
+                This action cannot be undone.
+              </AlertDialogDescription>
+            </AlertDialogHeader>
+            <AlertDialogFooter>
+              <AlertDialogCancel disabled={deleting}>Cancel</AlertDialogCancel>
+              <AlertDialogAction
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleDelete();
+                }}
+                disabled={deleting}
+                className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
+              >
+                {deleting ? (
+                  <span className="flex items-center gap-2">
+                    <Loader2 className="h-4 w-4 animate-spin" /> Deleting…
+                  </span>
+                ) : (
+                  "Delete account"
+                )}
+              </AlertDialogAction>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
       </main>
 
       <BottomNav />
