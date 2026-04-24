@@ -196,14 +196,6 @@ function ProfilePage() {
               className="input-linkr"
             />
           </Field>
-          <Field label={isCreator ? "Profile image URL" : "Product image URL"}>
-            <input
-              value={p.image_url ?? ""}
-              onChange={(e) => update("image_url", e.target.value)}
-              className="input-linkr"
-              placeholder="https://…"
-            />
-          </Field>
           <Field label={isCreator ? "Bio" : "Short description"}>
             <textarea
               value={(isCreator ? p.bio : p.product_description) ?? ""}
@@ -221,24 +213,40 @@ function ProfilePage() {
           {isCreator && (
             <>
               <Field label="Instagram">
-                <div className="relative">
-                  <Instagram className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                <div className="flex items-stretch gap-2">
+                  <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border border-border bg-muted text-base font-semibold text-muted-foreground">
+                    @
+                  </span>
                   <input
-                    value={p.instagram ?? ""}
-                    onChange={(e) => update("instagram", e.target.value)}
-                    className="input-linkr pl-11"
-                    placeholder="@yourhandle"
+                    type="text"
+                    value={(p.instagram ?? "").replace(/^@/, "")}
+                    onChange={(e) =>
+                      update("instagram", e.target.value.replace(/^@+/, ""))
+                    }
+                    className="input-linkr"
+                    placeholder="yourhandle"
+                    autoCapitalize="none"
+                    autoCorrect="off"
+                    spellCheck={false}
                   />
                 </div>
               </Field>
               <Field label="TikTok">
-                <div className="relative">
-                  <Music2 className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                <div className="flex items-stretch gap-2">
+                  <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border border-border bg-muted text-base font-semibold text-muted-foreground">
+                    @
+                  </span>
                   <input
-                    value={p.tiktok ?? ""}
-                    onChange={(e) => update("tiktok", e.target.value)}
-                    className="input-linkr pl-11"
-                    placeholder="@yourhandle"
+                    type="text"
+                    value={(p.tiktok ?? "").replace(/^@/, "")}
+                    onChange={(e) =>
+                      update("tiktok", e.target.value.replace(/^@+/, ""))
+                    }
+                    className="input-linkr"
+                    placeholder="yourhandle"
+                    autoCapitalize="none"
+                    autoCorrect="off"
+                    spellCheck={false}
                   />
                 </div>
               </Field>
