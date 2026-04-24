@@ -16,7 +16,7 @@ type ProfileRow = {
   categories: string[] | null;
 };
 
-export const Route = createFileRoute("/profile/$id")({
+export const Route = createFileRoute("/u/$id")({
   component: ProfileDetail,
 });
 
@@ -114,7 +114,6 @@ function ProfileDetail() {
           </h1>
         </div>
       </div>
-
       {/* Body */}
       <main className="mx-auto w-full max-w-md px-6 pt-6">
         {(profile.bio || profile.product_description) && (
@@ -174,7 +173,7 @@ function ProfileDetail() {
         )}
       </main>
     </div>
-  );
+  )
 }
 
 function SocialRow({
@@ -205,5 +204,5 @@ function SocialRow({
         <span className="text-sm font-medium text-foreground">@{handle.replace(/^@/, "")}</span>
       </div>
     </a>
-  );
+  )
 }
