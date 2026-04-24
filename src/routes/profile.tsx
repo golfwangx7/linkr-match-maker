@@ -294,6 +294,14 @@ function ProfilePage() {
           <Save className="h-5 w-5" />
           {saving ? "Saving…" : "Save changes"}
         </button>
+
+        <Link
+          to="/settings"
+          className="mt-3 flex h-14 w-full items-center justify-center gap-2 rounded-full border border-border bg-card text-base font-semibold text-foreground transition-all hover:border-primary hover:text-primary active:scale-[0.98]"
+        >
+          <Settings className="h-5 w-5" />
+          Settings
+        </Link>
       </main>
 
       <BottomNav />
