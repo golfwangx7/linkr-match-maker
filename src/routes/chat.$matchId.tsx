@@ -40,6 +40,15 @@ function Chat() {
 
   useEffect(() => {
     if (!user) return;
+    let isUserA = false;
+
+    const markRead = async () => {
+      const patch = isUserA
+        ? { last_read_a: new Date().toISOString() }
+        : { last_read_b: new Date().toISOString() };
+      await supabase.from("matches").update(patch).eq("id", matchId);
+    };
+
     const init = async () => {
       const { data: m } = await supabase
         .from("matches")
@@ -51,7 +60,8 @@ function Chat() {
         navigate({ to: "/matches" });
         return;
       }
-      const otherId = m.user_a === user.id ? m.user_b : m.user_a;
+      isUserA = m.user_a === user.id;
+      const otherId = isUserA ? m.user_b : m.user_a;
       const { data: prof } = await supabase
         .from("profiles")
         .select("id, display_name, image_url, role")
@@ -65,6 +75,7 @@ function Chat() {
         .eq("match_id", matchId)
         .order("created_at", { ascending: true });
       setMessages(msgs ?? []);
+      markRead();
     };
     init();
 
@@ -79,6 +90,7 @@ function Chat() {
             if (cur.some((m) => m.id === next.id)) return cur;
             return [...cur, next];
           });
+          if ((payload.new as Message).sender_id !== user.id) markRead();
         },
       )
       .subscribe();
