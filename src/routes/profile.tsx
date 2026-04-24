@@ -400,15 +400,6 @@ function ProfilePage() {
           {saving ? "Saving…" : "Save changes"}
         </button>
 
-        <button
-          type="button"
-          onClick={() => navigate({ to: "/settings" })}
-          className="mt-4 flex h-14 w-full items-center justify-center gap-2 rounded-full border-2 border-primary bg-card text-base font-semibold text-foreground shadow-sm transition-colors hover:bg-primary/10"
-        >
-          <Settings className="h-5 w-5" />
-          Settings
-        </button>
-
         <AlertDialog open={confirmDelete} onOpenChange={setConfirmDelete}>
           <AlertDialogContent>
             <AlertDialogHeader>
