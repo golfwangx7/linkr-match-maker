@@ -4,8 +4,9 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
 import { BottomNav } from "@/components/BottomNav";
 import { CATEGORIES } from "@/lib/categories";
-import { LogOut, Save, Instagram, Music2 } from "lucide-react";
+import { LogOut, Save, Upload, Loader2 } from "lucide-react";
 import { toast } from "sonner";
+import { useRef } from "react";
 
 type Profile = {
   id: string;
