@@ -1,6 +1,7 @@
 import { Outlet, createRootRoute, HeadContent, Scripts, Link } from "@tanstack/react-router";
 import { AuthProvider } from "@/lib/auth-context";
 import { Toaster } from "@/components/ui/sonner";
+import { useNotifications } from "@/hooks/use-notifications";
 
 import appCss from "../styles.css?url";
 
@@ -75,8 +76,14 @@ function RootShell({ children }: { children: React.ReactNode }) {
 function RootComponent() {
   return (
     <AuthProvider>
+      <NotificationsBridge />
       <Outlet />
       <Toaster />
     </AuthProvider>
   );
+}
+
+function NotificationsBridge() {
+  useNotifications();
+  return null;
 }
