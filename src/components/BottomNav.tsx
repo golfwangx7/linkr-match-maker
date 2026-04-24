@@ -1,13 +1,15 @@
 import { Link, useLocation } from "@tanstack/react-router";
 import { Flame, MessageCircle, User } from "lucide-react";
 import { useUnreadMatchesCount } from "@/hooks/use-unread-matches";
+import { useIncomingLikesCount } from "@/hooks/use-incoming-likes";
 
 export function BottomNav() {
   const { pathname } = useLocation();
   const unread = useUnreadMatchesCount();
+  const likes = useIncomingLikesCount();
   const items = [
     { to: "/feed", label: "Discover", icon: Flame, badge: 0 },
-    { to: "/matches", label: "Matches", icon: MessageCircle, badge: unread },
+    { to: "/matches", label: "Matches", icon: MessageCircle, badge: unread + likes },
     { to: "/profile", label: "Profile", icon: User, badge: 0 },
   ] as const;
 
