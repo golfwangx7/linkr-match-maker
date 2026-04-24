@@ -190,13 +190,6 @@ function ProfilePage() {
               <LogOut className="h-4 w-4" />
               <span>Sign out</span>
             </button>
-            <Link
-              to="/settings"
-              className="flex h-10 items-center gap-1.5 rounded-full border border-border bg-card px-3 text-xs font-medium text-foreground shadow-sm transition-all hover:border-primary hover:text-primary active:scale-95"
-            >
-              <Settings className="h-4 w-4" />
-              <span>Settings</span>
-            </Link>
           </div>
         </div>
       </header>
