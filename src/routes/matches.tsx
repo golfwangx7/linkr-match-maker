@@ -92,10 +92,11 @@ function Matches() {
         ms.map((m) => {
           const lastMessage = lastByMatch.get(m.id) ?? null;
           const lastRead = m.user_a === user.id ? m.last_read_a : m.last_read_b;
-          const unread =
-            !!lastMessage &&
-            lastMessage.sender_id !== user.id &&
-            new Date(lastMessage.created_at) > new Date(lastRead);
+          const unread = lastMessage
+            ? lastMessage.sender_id !== user.id &&
+              new Date(lastMessage.created_at) > new Date(lastRead)
+            : // Brand-new match with no messages yet → highlight as new.
+              new Date(m.created_at) >= new Date(lastRead);
           return {
             ...m,
             other: byId.get(m.user_a === user.id ? m.user_b : m.user_a) ?? null,
