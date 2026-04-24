@@ -148,9 +148,9 @@ function ProfilePage() {
             <Link
               to="/settings"
               aria-label="Settings"
-              className="flex h-9 w-9 items-center justify-center rounded-full border border-border bg-card text-muted-foreground transition-colors hover:border-primary hover:text-foreground"
+              className="flex h-10 w-10 items-center justify-center rounded-full border border-border bg-card text-foreground shadow-sm transition-all hover:border-primary hover:text-primary active:scale-95"
             >
-              <Settings className="h-4 w-4" />
+              <Settings className="h-5 w-5" />
             </Link>
           </div>
         </div>
