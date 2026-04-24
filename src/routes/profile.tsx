@@ -13,6 +13,7 @@ import {
   Mail,
   Trash2,
   ChevronDown,
+  Settings,
 } from "lucide-react";
 import { toast } from "sonner";
 import {
