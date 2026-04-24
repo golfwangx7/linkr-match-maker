@@ -183,7 +183,14 @@ function ProfilePage() {
       <header className="px-5 pt-12 pb-4">
         <div className="flex items-center justify-between gap-2">
           <h1 className="truncate text-2xl font-bold sm:text-3xl">Profile</h1>
-          <div className="flex shrink-0 items-center gap-2">
+          <div className="flex shrink-0 flex-row items-center gap-2">
+            <button
+              onClick={() => navigate({ to: "/settings" })}
+              className="flex h-10 items-center gap-1.5 rounded-full border border-border bg-card px-3 text-xs font-medium text-foreground transition-colors hover:border-primary"
+            >
+              <Settings className="h-4 w-4" />
+              <span>Settings</span>
+            </button>
             <button
               onClick={handleSignOut}
               className="flex h-10 items-center gap-1.5 rounded-full border border-border bg-card px-3 text-xs font-medium text-muted-foreground transition-colors hover:text-foreground"
