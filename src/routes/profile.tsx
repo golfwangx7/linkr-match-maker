@@ -127,11 +127,7 @@ function ProfilePage() {
   };
 
   if (!p) {
-    return (
-      <div className="flex min-h-screen items-center justify-center bg-background">
-        <div className="text-sm text-muted-foreground">Loading…</div>
-      </div>
-    );
+    return <div className="flex min-h-screen items-center justify-center bg-background"><div className="text-sm text-muted-foreground">Loading…</div></div>;
   }
 
   const isCreator = p.role === "creator";
