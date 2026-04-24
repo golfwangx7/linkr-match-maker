@@ -323,15 +323,6 @@ function ProfilePage() {
           </div>
         </div>
 
-        <button
-          onClick={save}
-          disabled={saving}
-          className="mt-8 flex h-14 w-full items-center justify-center gap-2 rounded-full bg-gradient-primary text-base font-semibold text-primary-foreground shadow-glow transition-transform active:scale-[0.98] disabled:opacity-60"
-        >
-          <Save className="h-5 w-5" />
-          {saving ? "Saving…" : "Save changes"}
-        </button>
-
         <section className="mt-10">
           <h2 className="mb-3 px-1 text-xs font-medium uppercase tracking-wider text-muted-foreground">
             Settings
@@ -391,6 +382,15 @@ function ProfilePage() {
             </button>
           </div>
         </section>
+
+        <button
+          onClick={save}
+          disabled={saving}
+          className="mt-8 flex h-14 w-full items-center justify-center gap-2 rounded-full bg-gradient-primary text-base font-semibold text-primary-foreground shadow-glow transition-transform active:scale-[0.98] disabled:opacity-60"
+        >
+          <Save className="h-5 w-5" />
+          {saving ? "Saving…" : "Save changes"}
+        </button>
 
         <AlertDialog open={confirmDelete} onOpenChange={setConfirmDelete}>
           <AlertDialogContent>
