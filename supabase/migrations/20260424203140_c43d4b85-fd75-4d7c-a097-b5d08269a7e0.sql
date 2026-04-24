@@ -1,0 +1,5 @@
+CREATE POLICY "Users can delete own swipes"
+ON public.swipes
+FOR DELETE
+TO authenticated
+USING (auth.uid() = swiper_id);
