@@ -4,8 +4,9 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
 import { BottomNav } from "@/components/BottomNav";
 import { CATEGORIES } from "@/lib/categories";
-import { LogOut, Save, Instagram, Music2 } from "lucide-react";
+import { LogOut, Save, Upload, Loader2 } from "lucide-react";
 import { toast } from "sonner";
+import { useRef } from "react";
 
 type Profile = {
   id: string;
@@ -28,6 +29,8 @@ function ProfilePage() {
   const navigate = useNavigate();
   const [p, setP] = useState<Profile | null>(null);
   const [saving, setSaving] = useState(false);
+  const [uploading, setUploading] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (!loading && !user) navigate({ to: "/auth", search: { mode: "signin" } });
@@ -77,6 +80,52 @@ function ProfilePage() {
     navigate({ to: "/" });
   };
 
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !user) return;
+
+    if (!file.type.startsWith("image/")) {
+      toast.error("Please select an image file");
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error("Image must be smaller than 5MB");
+      return;
+    }
+
+    setUploading(true);
+    const ext = file.name.split(".").pop() ?? "jpg";
+    const path = `${user.id}/${Date.now()}.${ext}`;
+
+    const { error: upErr } = await supabase.storage
+      .from("profile-images")
+      .upload(path, file, { upsert: true, contentType: file.type });
+
+    if (upErr) {
+      setUploading(false);
+      toast.error(upErr.message);
+      return;
+    }
+
+    const { data: urlData } = supabase.storage.from("profile-images").getPublicUrl(path);
+    const publicUrl = urlData.publicUrl;
+
+    const { error: updErr } = await supabase
+      .from("profiles")
+      .update({ image_url: publicUrl })
+      .eq("id", user.id);
+
+    setUploading(false);
+
+    if (updErr) {
+      toast.error(updErr.message);
+      return;
+    }
+
+    update("image_url", publicUrl);
+    toast.success("Image uploaded");
+  };
+
   if (!p) {
     return (
       <div className="flex min-h-screen items-center justify-center bg-background">
@@ -103,7 +152,7 @@ function ProfilePage() {
 
       <main className="mx-auto w-full max-w-md px-5">
         <div className="flex flex-col items-center gap-3">
-          <div className="h-28 w-28 overflow-hidden rounded-full border-4 border-primary/30 bg-muted shadow-glow">
+          <div className="relative h-28 w-28 overflow-hidden rounded-full border-4 border-primary/30 bg-muted shadow-glow">
             {p.image_url ? (
               <img src={p.image_url} alt="" className="h-full w-full object-cover" />
             ) : (
@@ -111,10 +160,31 @@ function ProfilePage() {
                 {p.display_name?.[0]?.toUpperCase() ?? "?"}
               </div>
             )}
+            {uploading && (
+              <div className="absolute inset-0 flex items-center justify-center bg-background/70">
+                <Loader2 className="h-6 w-6 animate-spin text-primary" />
+              </div>
+            )}
           </div>
           <span className="rounded-full bg-gradient-primary px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-primary-foreground shadow-glow">
             {p.role}
           </span>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            className="hidden"
+            onChange={handleFileChange}
+          />
+          <button
+            type="button"
+            onClick={() => fileInputRef.current?.click()}
+            disabled={uploading}
+            className="flex items-center gap-2 rounded-full border border-border bg-card px-4 py-2 text-sm font-medium text-foreground transition-colors hover:border-primary disabled:opacity-60"
+          >
+            <Upload className="h-4 w-4" />
+            {uploading ? "Uploading…" : isCreator ? "Upload profile picture" : "Upload product image"}
+          </button>
         </div>
 
         <div className="mt-8 space-y-4">
@@ -124,14 +194,6 @@ function ProfilePage() {
               onChange={(e) => update("display_name", e.target.value)}
               maxLength={50}
               className="input-linkr"
-            />
-          </Field>
-          <Field label={isCreator ? "Profile image URL" : "Product image URL"}>
-            <input
-              value={p.image_url ?? ""}
-              onChange={(e) => update("image_url", e.target.value)}
-              className="input-linkr"
-              placeholder="https://…"
             />
           </Field>
           <Field label={isCreator ? "Bio" : "Short description"}>
@@ -151,24 +213,40 @@ function ProfilePage() {
           {isCreator && (
             <>
               <Field label="Instagram">
-                <div className="relative">
-                  <Instagram className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                <div className="flex items-stretch gap-2">
+                  <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border border-border bg-muted text-base font-semibold text-muted-foreground">
+                    @
+                  </span>
                   <input
-                    value={p.instagram ?? ""}
-                    onChange={(e) => update("instagram", e.target.value)}
-                    className="input-linkr pl-11"
-                    placeholder="@yourhandle"
+                    type="text"
+                    value={(p.instagram ?? "").replace(/^@/, "")}
+                    onChange={(e) =>
+                      update("instagram", e.target.value.replace(/^@+/, ""))
+                    }
+                    className="input-linkr"
+                    placeholder="yourhandle"
+                    autoCapitalize="none"
+                    autoCorrect="off"
+                    spellCheck={false}
                   />
                 </div>
               </Field>
               <Field label="TikTok">
-                <div className="relative">
-                  <Music2 className="pointer-events-none absolute left-4 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                <div className="flex items-stretch gap-2">
+                  <span className="flex h-14 w-14 shrink-0 items-center justify-center rounded-2xl border border-border bg-muted text-base font-semibold text-muted-foreground">
+                    @
+                  </span>
                   <input
-                    value={p.tiktok ?? ""}
-                    onChange={(e) => update("tiktok", e.target.value)}
-                    className="input-linkr pl-11"
-                    placeholder="@yourhandle"
+                    type="text"
+                    value={(p.tiktok ?? "").replace(/^@/, "")}
+                    onChange={(e) =>
+                      update("tiktok", e.target.value.replace(/^@+/, ""))
+                    }
+                    className="input-linkr"
+                    placeholder="yourhandle"
+                    autoCapitalize="none"
+                    autoCorrect="off"
+                    spellCheck={false}
                   />
                 </div>
               </Field>
