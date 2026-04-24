@@ -15,6 +15,7 @@ import { Route as MatchesRouteImport } from './routes/matches'
 import { Route as FeedRouteImport } from './routes/feed'
 import { Route as AuthRouteImport } from './routes/auth'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as ProfileIdRouteImport } from './routes/profile.$id'
 import { Route as ChatMatchIdRouteImport } from './routes/chat.$matchId'
 
 const ProfileRoute = ProfileRouteImport.update({
@@ -47,6 +48,11 @@ const IndexRoute = IndexRouteImport.update({
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ProfileIdRoute = ProfileIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => ProfileRoute,
+} as any)
 const ChatMatchIdRoute = ChatMatchIdRouteImport.update({
   id: '/chat/$matchId',
   path: '/chat/$matchId',
@@ -59,8 +65,9 @@ export interface FileRoutesByFullPath {
   '/feed': typeof FeedRoute
   '/matches': typeof MatchesRoute
   '/onboarding': typeof OnboardingRoute
-  '/profile': typeof ProfileRoute
+  '/profile': typeof ProfileRouteWithChildren
   '/chat/$matchId': typeof ChatMatchIdRoute
+  '/profile/$id': typeof ProfileIdRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -68,8 +75,9 @@ export interface FileRoutesByTo {
   '/feed': typeof FeedRoute
   '/matches': typeof MatchesRoute
   '/onboarding': typeof OnboardingRoute
-  '/profile': typeof ProfileRoute
+  '/profile': typeof ProfileRouteWithChildren
   '/chat/$matchId': typeof ChatMatchIdRoute
+  '/profile/$id': typeof ProfileIdRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -78,8 +86,9 @@ export interface FileRoutesById {
   '/feed': typeof FeedRoute
   '/matches': typeof MatchesRoute
   '/onboarding': typeof OnboardingRoute
-  '/profile': typeof ProfileRoute
+  '/profile': typeof ProfileRouteWithChildren
   '/chat/$matchId': typeof ChatMatchIdRoute
+  '/profile/$id': typeof ProfileIdRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -91,6 +100,7 @@ export interface FileRouteTypes {
     | '/onboarding'
     | '/profile'
     | '/chat/$matchId'
+    | '/profile/$id'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -100,6 +110,7 @@ export interface FileRouteTypes {
     | '/onboarding'
     | '/profile'
     | '/chat/$matchId'
+    | '/profile/$id'
   id:
     | '__root__'
     | '/'
@@ -109,6 +120,7 @@ export interface FileRouteTypes {
     | '/onboarding'
     | '/profile'
     | '/chat/$matchId'
+    | '/profile/$id'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -117,7 +129,7 @@ export interface RootRouteChildren {
   FeedRoute: typeof FeedRoute
   MatchesRoute: typeof MatchesRoute
   OnboardingRoute: typeof OnboardingRoute
-  ProfileRoute: typeof ProfileRoute
+  ProfileRoute: typeof ProfileRouteWithChildren
   ChatMatchIdRoute: typeof ChatMatchIdRoute
 }
 
@@ -165,6 +177,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/profile/$id': {
+      id: '/profile/$id'
+      path: '/$id'
+      fullPath: '/profile/$id'
+      preLoaderRoute: typeof ProfileIdRouteImport
+      parentRoute: typeof ProfileRoute
+    }
     '/chat/$matchId': {
       id: '/chat/$matchId'
       path: '/chat/$matchId'
@@ -175,13 +194,24 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface ProfileRouteChildren {
+  ProfileIdRoute: typeof ProfileIdRoute
+}
+
+const ProfileRouteChildren: ProfileRouteChildren = {
+  ProfileIdRoute: ProfileIdRoute,
+}
+
+const ProfileRouteWithChildren =
+  ProfileRoute._addFileChildren(ProfileRouteChildren)
+
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthRoute: AuthRoute,
   FeedRoute: FeedRoute,
   MatchesRoute: MatchesRoute,
   OnboardingRoute: OnboardingRoute,
-  ProfileRoute: ProfileRoute,
+  ProfileRoute: ProfileRouteWithChildren,
   ChatMatchIdRoute: ChatMatchIdRoute,
 }
 export const routeTree = rootRouteImport

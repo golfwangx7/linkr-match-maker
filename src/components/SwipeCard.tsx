@@ -1,6 +1,7 @@
 import { useState } from "react";
+import { Link } from "@tanstack/react-router";
 import { motion, useMotionValue, useTransform, type PanInfo } from "framer-motion";
-import { Heart, X, Instagram, Music2, Tag, Sparkles, DollarSign } from "lucide-react";
+import { Heart, X, Instagram, Music2, Tag, Sparkles, DollarSign, Info } from "lucide-react";
 
 export type SwipeProfile = {
   id: string;
