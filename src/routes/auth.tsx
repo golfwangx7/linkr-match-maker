@@ -174,6 +174,59 @@ function AuthPage() {
           </button>
         </form>
 
+        {forgotOpen && mode === "signin" && (
+          <div className="mt-6 rounded-2xl border border-border bg-card p-4">
+            {forgotSent ? (
+              <div className="space-y-3 text-sm">
+                <p className="font-semibold">Check your email</p>
+                <p className="text-muted-foreground">
+                  If an account exists for <span className="text-foreground">{forgotEmail}</span>,
+                  we&apos;ve sent a link to reset your password.
+                </p>
+                <button
+                  type="button"
+                  onClick={() => setForgotOpen(false)}
+                  className="text-xs font-semibold text-primary hover:underline"
+                >
+                  Close
+                </button>
+              </div>
+            ) : (
+              <form onSubmit={handleForgot} className="space-y-3">
+                <div>
+                  <label className="mb-1.5 block text-xs font-medium uppercase tracking-wider text-muted-foreground">
+                    Reset password
+                  </label>
+                  <input
+                    type="email"
+                    required
+                    value={forgotEmail}
+                    onChange={(e) => setForgotEmail(e.target.value)}
+                    placeholder="you@example.com"
+                    className="h-12 w-full rounded-xl border border-border bg-background px-4 text-sm outline-none transition-colors focus:border-primary"
+                  />
+                </div>
+                <div className="flex items-center gap-2">
+                  <button
+                    type="submit"
+                    disabled={forgotLoading}
+                    className="flex h-10 flex-1 items-center justify-center rounded-full bg-primary text-sm font-semibold text-primary-foreground transition-transform active:scale-[0.98] disabled:opacity-60"
+                  >
+                    {forgotLoading ? "Sending…" : "Send reset link"}
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setForgotOpen(false)}
+                    className="h-10 px-4 text-xs font-semibold text-muted-foreground hover:text-foreground"
+                  >
+                    Cancel
+                  </button>
+                </div>
+              </form>
+            )}
+          </div>
+        )}
+
         <div className="mt-6 flex items-center gap-3">
           <div className="h-px flex-1 bg-border" />
           <span className="text-xs uppercase tracking-wider text-muted-foreground">or</span>
