@@ -18,18 +18,24 @@ export type Database = {
         Row: {
           created_at: string
           id: string
+          last_read_a: string
+          last_read_b: string
           user_a: string
           user_b: string
         }
         Insert: {
           created_at?: string
           id?: string
+          last_read_a?: string
+          last_read_b?: string
           user_a: string
           user_b: string
         }
         Update: {
           created_at?: string
           id?: string
+          last_read_a?: string
+          last_read_b?: string
           user_a?: string
           user_b?: string
         }
