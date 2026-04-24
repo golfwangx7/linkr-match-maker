@@ -1,9 +1,10 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { lovable } from "@/integrations/lovable";
 import { useAuth } from "@/lib/auth-context";
 import { toast } from "sonner";
-import { Flame, ArrowLeft } from "lucide-react";
+import { Flame, ArrowLeft, Apple } from "lucide-react";
 
 type Search = { mode?: "signin" | "signup" };
 
