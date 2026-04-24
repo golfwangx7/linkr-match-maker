@@ -4,7 +4,8 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
 import { BottomNav } from "@/components/BottomNav";
 import { CATEGORIES } from "@/lib/categories";
-import { LogOut, Save, Upload, Loader2 } from "lucide-react";
+import { LogOut, Save, Upload, Loader2, Settings } from "lucide-react";
+import { Link } from "@tanstack/react-router";
 import { toast } from "sonner";
 import { useRef } from "react";
 
@@ -137,12 +138,21 @@ function ProfilePage() {
       <header className="px-5 pt-12 pb-4">
         <div className="flex items-center justify-between">
           <h1 className="text-3xl font-bold">Profile</h1>
-          <button
-            onClick={handleSignOut}
-            className="flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1.5 text-xs font-medium text-muted-foreground"
-          >
-            <LogOut className="h-3.5 w-3.5" /> Sign out
-          </button>
+          <div className="flex items-center gap-2">
+            <button
+              onClick={handleSignOut}
+              className="flex items-center gap-1.5 rounded-full border border-border bg-card px-3 py-1.5 text-xs font-medium text-muted-foreground"
+            >
+              <LogOut className="h-3.5 w-3.5" /> Sign out
+            </button>
+            <Link
+              to="/settings"
+              aria-label="Settings"
+              className="flex h-9 w-9 items-center justify-center rounded-full border border-border bg-card text-muted-foreground transition-colors hover:border-primary hover:text-foreground"
+            >
+              <Settings className="h-4 w-4" />
+            </Link>
+          </div>
         </div>
       </header>
 
