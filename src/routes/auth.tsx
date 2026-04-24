@@ -63,6 +63,21 @@ function AuthPage() {
     }
   };
 
+  const handleApple = async () => {
+    setLoading(true);
+    try {
+      const result = await lovable.auth.signInWithOAuth("apple", {
+        redirect_uri: window.location.origin,
+      });
+      if (result.error) throw result.error;
+      // If redirected, browser navigates away; otherwise session is set.
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : "Apple sign-in failed";
+      toast.error(msg);
+      setLoading(false);
+    }
+  };
+
   return (
     <div className="flex min-h-screen flex-col bg-gradient-hero px-6">
       <div className="mx-auto w-full max-w-md flex-1 pt-12">
