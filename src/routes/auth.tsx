@@ -1,9 +1,10 @@
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
+import { lovable } from "@/integrations/lovable";
 import { useAuth } from "@/lib/auth-context";
 import { toast } from "sonner";
-import { Flame, ArrowLeft } from "lucide-react";
+import { Flame, ArrowLeft, Apple } from "lucide-react";
 
 type Search = { mode?: "signin" | "signup" };
 
@@ -58,6 +59,21 @@ function AuthPage() {
       const msg = err instanceof Error ? err.message : "Something went wrong";
       toast.error(msg);
     } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleApple = async () => {
+    setLoading(true);
+    try {
+      const result = await lovable.auth.signInWithOAuth("apple", {
+        redirect_uri: window.location.origin,
+      });
+      if (result.error) throw result.error;
+      // If redirected, browser navigates away; otherwise session is set.
+    } catch (err) {
+      const msg = err instanceof Error ? err.message : "Apple sign-in failed";
+      toast.error(msg);
       setLoading(false);
     }
   };
@@ -122,6 +138,22 @@ function AuthPage() {
             {loading ? "Please wait…" : mode === "signup" ? "Create account" : "Sign in"}
           </button>
         </form>
+
+        <div className="mt-6 flex items-center gap-3">
+          <div className="h-px flex-1 bg-border" />
+          <span className="text-xs uppercase tracking-wider text-muted-foreground">or</span>
+          <div className="h-px flex-1 bg-border" />
+        </div>
+
+        <button
+          type="button"
+          onClick={handleApple}
+          disabled={loading}
+          className="mt-6 flex h-14 w-full items-center justify-center gap-2 rounded-full bg-foreground text-base font-semibold text-background transition-transform active:scale-[0.98] disabled:opacity-60"
+        >
+          <Apple className="h-5 w-5" />
+          {mode === "signup" ? "Sign up with Apple" : "Sign in with Apple"}
+        </button>
 
         <div className="mt-6 text-center text-sm text-muted-foreground">
           {mode === "signup" ? "Already have an account? " : "New to Linkr? "}
