@@ -152,7 +152,7 @@ function ProfilePage() {
 
       <main className="mx-auto w-full max-w-md px-5">
         <div className="flex flex-col items-center gap-3">
-          <div className="h-28 w-28 overflow-hidden rounded-full border-4 border-primary/30 bg-muted shadow-glow">
+          <div className="relative h-28 w-28 overflow-hidden rounded-full border-4 border-primary/30 bg-muted shadow-glow">
             {p.image_url ? (
               <img src={p.image_url} alt="" className="h-full w-full object-cover" />
             ) : (
@@ -160,10 +160,31 @@ function ProfilePage() {
                 {p.display_name?.[0]?.toUpperCase() ?? "?"}
               </div>
             )}
+            {uploading && (
+              <div className="absolute inset-0 flex items-center justify-center bg-background/70">
+                <Loader2 className="h-6 w-6 animate-spin text-primary" />
+              </div>
+            )}
           </div>
           <span className="rounded-full bg-gradient-primary px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-primary-foreground shadow-glow">
             {p.role}
           </span>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            className="hidden"
+            onChange={handleFileChange}
+          />
+          <button
+            type="button"
+            onClick={() => fileInputRef.current?.click()}
+            disabled={uploading}
+            className="flex items-center gap-2 rounded-full border border-border bg-card px-4 py-2 text-sm font-medium text-foreground transition-colors hover:border-primary disabled:opacity-60"
+          >
+            <Upload className="h-4 w-4" />
+            {uploading ? "Uploading…" : isCreator ? "Upload profile picture" : "Upload product image"}
+          </button>
         </div>
 
         <div className="mt-8 space-y-4">
