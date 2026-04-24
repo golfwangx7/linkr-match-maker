@@ -139,6 +139,22 @@ function AuthPage() {
           </button>
         </form>
 
+        <div className="mt-6 flex items-center gap-3">
+          <div className="h-px flex-1 bg-border" />
+          <span className="text-xs uppercase tracking-wider text-muted-foreground">or</span>
+          <div className="h-px flex-1 bg-border" />
+        </div>
+
+        <button
+          type="button"
+          onClick={handleApple}
+          disabled={loading}
+          className="mt-6 flex h-14 w-full items-center justify-center gap-2 rounded-full bg-foreground text-base font-semibold text-background transition-transform active:scale-[0.98] disabled:opacity-60"
+        >
+          <Apple className="h-5 w-5" />
+          {mode === "signup" ? "Sign up with Apple" : "Sign in with Apple"}
+        </button>
+
         <div className="mt-6 text-center text-sm text-muted-foreground">
           {mode === "signup" ? "Already have an account? " : "New to Linkr? "}
           <Link
