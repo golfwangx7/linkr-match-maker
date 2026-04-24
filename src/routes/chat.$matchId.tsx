@@ -124,21 +124,36 @@ function Chat() {
         <Link to="/matches" className="rounded-full p-2 active:bg-muted">
           <ArrowLeft className="h-5 w-5" />
         </Link>
-        <div className="h-10 w-10 overflow-hidden rounded-full bg-muted">
-          {other?.image_url ? (
-            <img src={other.image_url} alt="" className="h-full w-full object-cover" />
-          ) : (
-            <div className="flex h-full w-full items-center justify-center bg-gradient-primary text-sm font-bold text-primary-foreground">
-              {other?.display_name?.[0]?.toUpperCase() ?? "?"}
+        {other?.id ? (
+          <Link
+            to="/u/$id"
+            params={{ id: other.id }}
+            className="flex min-w-0 flex-1 items-center gap-3 rounded-full transition-opacity active:opacity-70"
+          >
+            <div className="h-10 w-10 overflow-hidden rounded-full bg-muted">
+              {other.image_url ? (
+                <img src={other.image_url} alt="" className="h-full w-full object-cover" />
+              ) : (
+                <div className="flex h-full w-full items-center justify-center bg-gradient-primary text-sm font-bold text-primary-foreground">
+                  {other.display_name?.[0]?.toUpperCase() ?? "?"}
+                </div>
+              )}
             </div>
-          )}
-        </div>
-        <div className="min-w-0 flex-1">
-          <h2 className="truncate font-semibold">{other?.display_name ?? "…"}</h2>
-          <p className="text-[11px] uppercase tracking-wider text-muted-foreground">
-            {other?.role}
-          </p>
-        </div>
+            <div className="min-w-0 flex-1 text-left">
+              <h2 className="truncate font-semibold">{other.display_name ?? "…"}</h2>
+              <p className="text-[11px] uppercase tracking-wider text-muted-foreground">
+                {other.role}
+              </p>
+            </div>
+          </Link>
+        ) : (
+          <div className="flex min-w-0 flex-1 items-center gap-3">
+            <div className="h-10 w-10 rounded-full bg-muted" />
+            <div className="min-w-0 flex-1">
+              <h2 className="truncate font-semibold">…</h2>
+            </div>
+          </div>
+        )}
       </header>
 
       <div ref={scrollRef} className="no-scrollbar flex-1 overflow-y-auto px-4 py-4">
