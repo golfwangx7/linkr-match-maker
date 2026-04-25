@@ -189,8 +189,8 @@ function Feed() {
         </button>
       </header>
 
-      <main className="mx-auto flex w-full max-w-md flex-1 flex-col px-5">
-        <div className="relative aspect-[3/4] w-full">
+      <main className="mx-auto flex w-full max-w-md flex-1 flex-col px-5 pb-4">
+        <div className="relative w-full flex-1">
           {filtered.length === 0 ? (
             <EmptyState hasFilters={activeFilterCount > 0} onClear={() => setFilters(EMPTY_FILTERS)} />
           ) : (
@@ -205,28 +205,29 @@ function Feed() {
             ))
           )}
         </div>
+      </main>
 
-        {top && (
-          <SwipeActions
-            onSkip={() => handleSwipe("skip")}
-            onLike={() => handleSwipe("like")}
-          />
-        )}
-
-        {lastSwipe && (
-          <div className="mt-3 flex justify-center">
+      {top && (
+        <div className="pointer-events-none fixed inset-x-0 bottom-20 z-30 flex flex-col items-center gap-2 pb-[env(safe-area-inset-bottom)]">
+          <div className="pointer-events-auto">
+            <SwipeActions
+              onSkip={() => handleSwipe("skip")}
+              onLike={() => handleSwipe("like")}
+            />
+          </div>
+          {lastSwipe && (
             <button
               type="button"
               onClick={handleUndo}
               disabled={undoing}
-              className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-4 py-2 text-xs font-medium text-muted-foreground transition-colors active:bg-muted disabled:opacity-50"
+              className="pointer-events-auto inline-flex items-center gap-1.5 rounded-full border border-border bg-card/90 px-3 py-1.5 text-[11px] font-medium text-muted-foreground backdrop-blur transition-colors active:bg-muted disabled:opacity-50"
             >
-              <Undo2 className="h-3.5 w-3.5" />
-              Undo last swipe
+              <Undo2 className="h-3 w-3" />
+              Undo
             </button>
-          </div>
-        )}
-      </main>
+          )}
+        </div>
+      )}
 
       {matchModal && (
         <MatchModal profile={matchModal} onClose={() => setMatchModal(null)} />
