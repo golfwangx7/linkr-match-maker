@@ -2,6 +2,7 @@ import { Outlet, createRootRoute, HeadContent, Scripts, Link } from "@tanstack/r
 import { AuthProvider } from "@/lib/auth-context";
 import { Toaster } from "@/components/ui/sonner";
 import { useNotifications } from "@/hooks/use-notifications";
+import { SplashScreen } from "@/components/SplashScreen";
 
 import appCss from "../styles.css?url";
 
@@ -77,6 +78,7 @@ function RootComponent() {
   return (
     <AuthProvider>
       <NotificationsBridge />
+      <SplashScreen />
       <Outlet />
       <Toaster />
     </AuthProvider>
