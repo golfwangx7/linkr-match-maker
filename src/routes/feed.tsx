@@ -7,11 +7,12 @@ import { SwipeCard, SwipeActions, type SwipeProfile } from "@/components/SwipeCa
 import { Flame, Sparkles, SlidersHorizontal, X, Undo2 } from "lucide-react";
 import { toast } from "sonner";
 import { CATEGORIES } from "@/lib/categories";
-import { COUNTRIES } from "@/lib/countries";
+import { COUNTRIES, OTHER_COUNTRY } from "@/lib/countries";
 import {
   Select,
   SelectContent,
   SelectItem,
+  SelectSeparator,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
@@ -341,11 +342,14 @@ function FilterSheet({
               </SelectTrigger>
               <SelectContent className="rounded-2xl">
                 <SelectItem value="all">All countries</SelectItem>
+                <SelectSeparator />
                 {COUNTRIES.map((c) => (
                   <SelectItem key={c} value={c}>
                     {c}
                   </SelectItem>
                 ))}
+                <SelectSeparator />
+                <SelectItem value={OTHER_COUNTRY}>Other</SelectItem>
               </SelectContent>
             </Select>
           </div>

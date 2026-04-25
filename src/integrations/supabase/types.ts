@@ -79,6 +79,7 @@ export type Database = {
           categories: string[] | null
           country: string | null
           created_at: string
+          custom_country: string | null
           display_name: string | null
           gender: string | null
           id: string
@@ -94,6 +95,7 @@ export type Database = {
           categories?: string[] | null
           country?: string | null
           created_at?: string
+          custom_country?: string | null
           display_name?: string | null
           gender?: string | null
           id: string
@@ -109,6 +111,7 @@ export type Database = {
           categories?: string[] | null
           country?: string | null
           created_at?: string
+          custom_country?: string | null
           display_name?: string | null
           gender?: string | null
           id?: string

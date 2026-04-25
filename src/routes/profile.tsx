@@ -4,11 +4,12 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
 import { BottomNav } from "@/components/BottomNav";
 import { CATEGORIES } from "@/lib/categories";
-import { COUNTRIES } from "@/lib/countries";
+import { COUNTRIES, OTHER_COUNTRY } from "@/lib/countries";
 import {
   Select,
   SelectContent,
   SelectItem,
+  SelectSeparator,
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
@@ -32,6 +33,7 @@ type Profile = {
   product_description: string | null;
   categories: string[] | null;
   country: string | null;
+  custom_country: string | null;
 };
 
 export const Route = createFileRoute("/profile")({
@@ -83,7 +85,9 @@ function ProfilePage() {
         product_description: p.product_description,
         categories: p.categories,
         country: p.country,
-      })
+        custom_country:
+          p.country === OTHER_COUNTRY ? p.custom_country?.trim() || null : null,
+      } as never)
       .eq("id", user.id);
     setSaving(false);
     if (error) toast.error(error.message);
@@ -312,8 +316,19 @@ function ProfilePage() {
                     {c}
                   </SelectItem>
                 ))}
+                <SelectSeparator />
+                <SelectItem value={OTHER_COUNTRY}>Other</SelectItem>
               </SelectContent>
             </Select>
+            {p.country === OTHER_COUNTRY && (
+              <input
+                value={p.custom_country ?? ""}
+                onChange={(e) => update("custom_country", e.target.value)}
+                maxLength={60}
+                className="input-linkr mt-2"
+                placeholder="Enter your country (optional)"
+              />
+            )}
           </Field>
         </div>
 
