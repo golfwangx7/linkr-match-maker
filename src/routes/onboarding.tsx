@@ -5,6 +5,14 @@ import { useAuth } from "@/lib/auth-context";
 import { toast } from "sonner";
 import { Sparkles, Building2, Flame } from "lucide-react";
 import { CATEGORIES } from "@/lib/categories";
+import { COUNTRIES } from "@/lib/countries";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export const Route = createFileRoute("/onboarding")({
   component: Onboarding,
@@ -24,6 +32,7 @@ function Onboarding() {
   const [tiktok, setTiktok] = useState("");
   const [productDescription, setProductDescription] = useState("");
   const [selectedCats, setSelectedCats] = useState<string[]>([]);
+  const [country, setCountry] = useState<string>("");
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
@@ -43,6 +52,10 @@ function Onboarding() {
       toast.error("Pick at least one category");
       return;
     }
+    if (!country) {
+      toast.error("Select your country");
+      return;
+    }
     setSaving(true);
     const { error } = await supabase
       .from("profiles")
@@ -55,6 +68,7 @@ function Onboarding() {
         tiktok: role === "creator" ? tiktok.trim() || null : null,
         product_description: role === "brand" ? productDescription.trim() || null : null,
         categories: selectedCats,
+        country,
       })
       .eq("id", user.id);
     setSaving(false);
