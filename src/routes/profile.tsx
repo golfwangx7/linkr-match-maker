@@ -297,6 +297,24 @@ function ProfilePage() {
               })}
             </div>
           </div>
+
+          <Field label="Country">
+            <Select
+              value={p.country ?? ""}
+              onValueChange={(v) => update("country", v)}
+            >
+              <SelectTrigger className="input-linkr flex items-center">
+                <SelectValue placeholder="Select your country" />
+              </SelectTrigger>
+              <SelectContent className="rounded-2xl">
+                {COUNTRIES.map((c) => (
+                  <SelectItem key={c} value={c}>
+                    {c}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </Field>
         </div>
 
         <button
