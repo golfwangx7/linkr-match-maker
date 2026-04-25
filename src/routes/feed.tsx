@@ -208,7 +208,7 @@ function Feed() {
       </main>
 
       {top && (
-        <div className="pointer-events-none fixed inset-x-0 bottom-16 z-30 flex flex-col items-center gap-1.5 pb-[env(safe-area-inset-bottom)]">
+        <div className="pointer-events-none fixed inset-x-0 bottom-[calc(4rem+1.75rem)] z-30 flex flex-col items-center gap-1.5 pb-[env(safe-area-inset-bottom)]">
           <div className="pointer-events-auto">
             <SwipeActions
               onSkip={() => handleSwipe("skip")}
