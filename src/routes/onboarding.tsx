@@ -209,6 +209,21 @@ function Onboarding() {
                   })}
                 </div>
               </div>
+
+              <Field label="Country">
+                <Select value={country} onValueChange={setCountry}>
+                  <SelectTrigger className="input-linkr flex items-center">
+                    <SelectValue placeholder="Select your country" />
+                  </SelectTrigger>
+                  <SelectContent className="rounded-2xl">
+                    {COUNTRIES.map((c) => (
+                      <SelectItem key={c} value={c}>
+                        {c}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </Field>
             </div>
 
             <button
