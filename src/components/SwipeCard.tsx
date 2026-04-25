@@ -126,17 +126,17 @@ export function SwipeCard({
         </div>
 
         <div className="absolute inset-x-0 bottom-0 p-6 text-white">
-          <div className="mb-2 inline-flex rounded-full bg-white/15 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider backdrop-blur">
+          <div className="mb-3 inline-flex rounded-full bg-white/15 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider backdrop-blur">
             {profile.role}
           </div>
           <h2 className="text-3xl font-bold">{profile.display_name ?? "Anonymous"}</h2>
           {(profile.bio || profile.product_description) && (
-            <p className="mt-2 line-clamp-3 text-sm text-white/85">
+            <p className="mt-3.5 line-clamp-3 text-sm leading-relaxed text-white/85">
               {profile.bio || profile.product_description}
             </p>
           )}
           {profile.categories && profile.categories.length > 0 && (
-            <div className="mt-3 flex flex-wrap gap-1.5">
+            <div className="mt-5 flex flex-wrap gap-2">
               {profile.categories.slice(0, 4).map((c) => (
                 <span
                   key={c}
