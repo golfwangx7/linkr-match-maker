@@ -96,6 +96,9 @@
   html, body, #root {
     height: 100%;
   }
+  html {
+    background: #0A0A0F;
+  }
   body {
     background: var(--background);
     color: var(--foreground);
