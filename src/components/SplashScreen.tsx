@@ -2,18 +2,14 @@ import { useEffect, useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import appIcon from "@/assets/app-icon.png";
 
-const STORAGE_KEY = "linkr_splash_shown";
-
 export function SplashScreen() {
-  const [visible, setVisible] = useState(false);
+  // Show on every cold load so it's the first thing the user ever sees,
+  // mirroring an iOS launch screen.
+  const [visible, setVisible] = useState(true);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
-    // Show once per browser session for a premium-feel cold start.
-    if (sessionStorage.getItem(STORAGE_KEY)) return;
-    sessionStorage.setItem(STORAGE_KEY, "1");
-    setVisible(true);
-    const t = setTimeout(() => setVisible(false), 1600);
+    const t = setTimeout(() => setVisible(false), 1500);
     return () => clearTimeout(t);
   }, []);
 
@@ -38,7 +34,7 @@ export function SplashScreen() {
               alt="Linkr"
               width={112}
               height={112}
-              className="h-28 w-28 rounded-[28px] shadow-glow"
+              className="h-28 w-28 rounded-[28px]"
             />
             <span className="text-2xl font-bold tracking-tight text-white">Linkr</span>
           </motion.div>

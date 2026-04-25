@@ -33,7 +33,7 @@ export const Route = createRootRoute({
     meta: [
       { charSet: "utf-8" },
       { name: "viewport", content: "width=device-width, initial-scale=1, viewport-fit=cover" },
-      { name: "theme-color", content: "#1a0a1f" },
+      { name: "theme-color", content: "#0A0A0F" },
       { title: "Linkr — Match creators with brands" },
       { name: "description", content: "Linkr connects UGC creators with brands. Swipe, match, and collaborate." },
       { property: "og:title", content: "Linkr — Match creators with brands" },
@@ -64,11 +64,11 @@ export const Route = createRootRoute({
 
 function RootShell({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en" className="dark" style={{ background: "#0A0A0F" }}>
       <head>
         <HeadContent />
       </head>
-      <body>
+      <body style={{ background: "#0A0A0F" }}>
         {children}
         <Scripts />
       </body>
