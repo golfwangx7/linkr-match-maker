@@ -189,7 +189,7 @@ function Feed() {
         </button>
       </header>
 
-      <main className="mx-auto flex w-full max-w-md flex-1 flex-col px-5 pb-28">
+      <main className="mx-auto flex w-full max-w-md flex-1 flex-col px-4 pb-20">
         <div className="relative w-full flex-1 min-h-0">
           {filtered.length === 0 ? (
             <EmptyState hasFilters={activeFilterCount > 0} onClear={() => setFilters(EMPTY_FILTERS)} />
