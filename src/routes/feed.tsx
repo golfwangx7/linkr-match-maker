@@ -7,6 +7,14 @@ import { SwipeCard, SwipeActions, type SwipeProfile } from "@/components/SwipeCa
 import { Flame, Sparkles, SlidersHorizontal, X, Undo2 } from "lucide-react";
 import { toast } from "sonner";
 import { CATEGORIES } from "@/lib/categories";
+import { COUNTRIES } from "@/lib/countries";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 
 export const Route = createFileRoute("/feed")({
   component: Feed,
@@ -324,12 +332,22 @@ function FilterSheet({
             <label className="mb-2 block text-xs font-medium uppercase tracking-wider text-muted-foreground">
               Country
             </label>
-            <input
-              value={draft.country}
-              onChange={(e) => setDraft({ ...draft, country: e.target.value })}
-              placeholder="e.g. Germany"
-              className="h-12 w-full rounded-2xl border border-border bg-card px-4 text-sm outline-none focus:border-primary"
-            />
+            <Select
+              value={draft.country || "all"}
+              onValueChange={(v) => setDraft({ ...draft, country: v === "all" ? "" : v })}
+            >
+              <SelectTrigger className="h-12 w-full rounded-2xl border border-border bg-card px-4 text-sm focus:border-primary focus:ring-0">
+                <SelectValue placeholder="All countries" />
+              </SelectTrigger>
+              <SelectContent className="rounded-2xl">
+                <SelectItem value="all">All countries</SelectItem>
+                {COUNTRIES.map((c) => (
+                  <SelectItem key={c} value={c}>
+                    {c}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
           </div>
 
           <div>
