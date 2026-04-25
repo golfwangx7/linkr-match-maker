@@ -78,6 +78,7 @@ function RootComponent() {
   return (
     <AuthProvider>
       <NotificationsBridge />
+      <SplashScreen />
       <Outlet />
       <Toaster />
     </AuthProvider>
