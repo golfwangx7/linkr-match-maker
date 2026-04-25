@@ -167,8 +167,8 @@ function Feed() {
     (filters.country.trim() ? 1 : 0) + filters.genders.length + filters.categories.length;
 
   return (
-    <div className="flex min-h-screen flex-col bg-background pb-24">
-      <header className="flex items-center justify-between px-5 pt-12 pb-4">
+    <div className="flex min-h-screen flex-col bg-background pb-16">
+      <header className="flex items-center justify-between px-5 pt-10 pb-2">
         <div className="flex items-center gap-2">
           <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-primary shadow-glow">
             <Flame className="h-4.5 w-4.5 text-primary-foreground" strokeWidth={2.5} />
@@ -189,7 +189,7 @@ function Feed() {
         </button>
       </header>
 
-      <main className="mx-auto flex w-full max-w-md flex-1 flex-col px-5 pb-28">
+      <main className="mx-auto flex w-full max-w-md flex-1 flex-col px-4 pb-20">
         <div className="relative w-full flex-1 min-h-0">
           {filtered.length === 0 ? (
             <EmptyState hasFilters={activeFilterCount > 0} onClear={() => setFilters(EMPTY_FILTERS)} />
@@ -208,7 +208,7 @@ function Feed() {
       </main>
 
       {top && (
-        <div className="pointer-events-none fixed inset-x-0 bottom-20 z-30 flex flex-col items-center gap-2 pb-[env(safe-area-inset-bottom)]">
+        <div className="pointer-events-none fixed inset-x-0 bottom-16 z-30 flex flex-col items-center gap-1.5 pb-[env(safe-area-inset-bottom)]">
           <div className="pointer-events-auto">
             <SwipeActions
               onSkip={() => handleSwipe("skip")}
