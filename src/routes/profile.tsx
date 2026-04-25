@@ -4,6 +4,14 @@ import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
 import { BottomNav } from "@/components/BottomNav";
 import { CATEGORIES } from "@/lib/categories";
+import { COUNTRIES } from "@/lib/countries";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import {
   LogOut,
   Save,
@@ -23,6 +31,7 @@ type Profile = {
   tiktok: string | null;
   product_description: string | null;
   categories: string[] | null;
+  country: string | null;
 };
 
 export const Route = createFileRoute("/profile")({
@@ -73,6 +82,7 @@ function ProfilePage() {
         tiktok: p.tiktok,
         product_description: p.product_description,
         categories: p.categories,
+        country: p.country,
       })
       .eq("id", user.id);
     setSaving(false);
@@ -287,6 +297,24 @@ function ProfilePage() {
               })}
             </div>
           </div>
+
+          <Field label="Country">
+            <Select
+              value={p.country ?? ""}
+              onValueChange={(v) => update("country", v)}
+            >
+              <SelectTrigger className="input-linkr flex items-center">
+                <SelectValue placeholder="Select your country" />
+              </SelectTrigger>
+              <SelectContent className="rounded-2xl">
+                {COUNTRIES.map((c) => (
+                  <SelectItem key={c} value={c}>
+                    {c}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </Field>
         </div>
 
         <button
