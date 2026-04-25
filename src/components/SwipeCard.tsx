@@ -188,18 +188,18 @@ export function SwipeActions({
       <button
         onClick={onSkip}
         disabled={disabled}
-        className="flex h-12 w-12 items-center justify-center rounded-full border border-border bg-card/90 shadow-soft backdrop-blur transition-transform active:scale-90 disabled:opacity-40"
+        className="flex h-12 w-12 items-center justify-center rounded-full border border-destructive/40 bg-card/30 shadow-[0_0_22px_-2px_var(--destructive)] backdrop-blur-xl transition-all hover:bg-card/50 active:scale-90 disabled:opacity-40"
         aria-label="Skip"
       >
-        <X className="h-5 w-5 text-destructive" strokeWidth={2.5} />
+        <X className="h-5 w-5 text-destructive drop-shadow-[0_0_6px_var(--destructive)]" strokeWidth={2.5} />
       </button>
       <button
         onClick={onLike}
         disabled={disabled}
-        className="flex h-14 w-14 items-center justify-center rounded-full bg-gradient-primary shadow-glow transition-transform active:scale-90 disabled:opacity-40"
+        className="flex h-14 w-14 items-center justify-center rounded-full border border-primary/40 bg-card/30 shadow-[0_0_28px_-2px_var(--primary)] backdrop-blur-xl transition-all hover:bg-card/50 active:scale-90 disabled:opacity-40"
         aria-label="Like"
       >
-        <Heart className="h-6 w-6 text-primary-foreground" fill="currentColor" />
+        <Heart className="h-6 w-6 text-primary drop-shadow-[0_0_8px_var(--primary)]" fill="currentColor" />
       </button>
     </div>
   );
