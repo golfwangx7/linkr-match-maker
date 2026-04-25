@@ -5,7 +5,8 @@ import { useAuth } from "@/lib/auth-context";
 import { toast } from "sonner";
 import { Sparkles, Building2, Flame } from "lucide-react";
 import { CATEGORIES } from "@/lib/categories";
-import { COUNTRIES } from "@/lib/countries";
+import { COUNTRIES, OTHER_COUNTRY } from "@/lib/countries";
+import { SelectSeparator } from "@/components/ui/select";
 import {
   Select,
   SelectContent,
@@ -33,6 +34,7 @@ function Onboarding() {
   const [productDescription, setProductDescription] = useState("");
   const [selectedCats, setSelectedCats] = useState<string[]>([]);
   const [country, setCountry] = useState<string>("");
+  const [customCountry, setCustomCountry] = useState<string>("");
   const [saving, setSaving] = useState(false);
 
   useEffect(() => {
@@ -69,7 +71,9 @@ function Onboarding() {
         product_description: role === "brand" ? productDescription.trim() || null : null,
         categories: selectedCats,
         country,
-      })
+        custom_country:
+          country === OTHER_COUNTRY ? customCountry.trim() || null : null,
+      } as never)
       .eq("id", user.id);
     setSaving(false);
     if (error) {
@@ -221,8 +225,19 @@ function Onboarding() {
                         {c}
                       </SelectItem>
                     ))}
+                    <SelectSeparator />
+                    <SelectItem value={OTHER_COUNTRY}>Other</SelectItem>
                   </SelectContent>
                 </Select>
+                {country === OTHER_COUNTRY && (
+                  <input
+                    value={customCountry}
+                    onChange={(e) => setCustomCountry(e.target.value)}
+                    maxLength={60}
+                    className="input-linkr mt-2"
+                    placeholder="Enter your country (optional)"
+                  />
+                )}
               </Field>
             </div>
 
