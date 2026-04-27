@@ -181,7 +181,6 @@ function Feed() {
       style={{
         height: "100dvh",
         touchAction: "pan-x",
-        paddingBottom: "calc(4rem + env(safe-area-inset-bottom))",
       }}
     >
       <header className="flex items-center justify-between px-5 pt-[max(2.5rem,env(safe-area-inset-top))] pb-2">
@@ -205,7 +204,10 @@ function Feed() {
         </button>
       </header>
 
-      <main className="mx-auto flex w-full max-w-md flex-1 flex-col px-4 pb-24 overflow-hidden">
+      <main
+        className="mx-auto flex w-full max-w-md flex-1 flex-col px-4 overflow-hidden"
+        style={{ paddingBottom: "calc(4rem + env(safe-area-inset-bottom))" }}
+      >
         <div className="relative w-full flex-1 min-h-0 overflow-hidden" style={{ touchAction: "pan-x" }}>
           {filtered.length === 0 ? (
             <EmptyState hasFilters={activeFilterCount > 0} onClear={() => setFilters(EMPTY_FILTERS)} />
