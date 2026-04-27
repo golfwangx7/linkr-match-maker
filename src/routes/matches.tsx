@@ -203,7 +203,6 @@ function Matches() {
       <div
         className="flex-1 overflow-y-auto overscroll-contain"
         style={{
-          paddingBottom: "calc(4rem + env(safe-area-inset-bottom))",
           WebkitOverflowScrolling: "touch",
         }}
       >
