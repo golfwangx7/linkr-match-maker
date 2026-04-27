@@ -95,6 +95,7 @@ function ProfilePage() {
         country: p.country,
         custom_country:
           p.country === OTHER_COUNTRY ? p.custom_country?.trim() || null : null,
+        looking_for: p.looking_for ?? [],
       } as never)
       .eq("id", user.id);
     setSaving(false);
