@@ -84,7 +84,7 @@ export function SwipeCard({
       }
       whileTap={{ cursor: "grabbing" }}
     >
-      <div className="relative h-full w-full overflow-hidden bg-gradient-card">
+      <div className="relative h-full w-full overflow-hidden rounded-3xl bg-gradient-card shadow-card">
         <img
           src={profile.image_url || fallback}
           alt={profile.display_name ?? "profile"}
@@ -127,10 +127,8 @@ export function SwipeCard({
           </div>
         </div>
 
-        <div
-          className="absolute inset-x-0 bottom-0 p-6 text-white"
-          style={{ paddingBottom: "calc(11rem + env(safe-area-inset-bottom))" }}
-        >
+        <div className="absolute inset-x-0 bottom-0 p-6 text-white">
+
           <div className="mb-3 inline-flex rounded-full bg-white/15 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider backdrop-blur">
             {profile.role}
           </div>

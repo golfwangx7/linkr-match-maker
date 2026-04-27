@@ -177,23 +177,20 @@ function Feed() {
 
   return (
     <div
-      className="fixed inset-x-0 top-0 flex flex-col overflow-hidden overscroll-none bg-background"
-      style={{
-        height: "100dvh",
-        touchAction: "pan-x",
-      }}
+      className="fixed inset-0 flex flex-col overflow-hidden overscroll-none bg-background"
+      style={{ touchAction: "pan-x" }}
     >
-      <header className="pointer-events-none absolute inset-x-0 top-0 z-20 flex items-center justify-between px-5 pt-[max(1rem,env(safe-area-inset-top))] pb-2">
-        <div className="pointer-events-auto flex items-center gap-2">
+      <header className="relative z-20 flex shrink-0 items-center justify-between px-5 pt-[max(1rem,env(safe-area-inset-top))] pb-3">
+        <div className="flex items-center gap-2">
           <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-primary shadow-glow">
             <Flame className="h-4.5 w-4.5 text-primary-foreground" strokeWidth={2.5} />
           </div>
-          <span className="text-lg font-bold drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)]">Linkr</span>
+          <span className="text-lg font-bold">Linkr</span>
         </div>
         <button
           onClick={() => setFilterOpen(true)}
           aria-label="Filters"
-          className="pointer-events-auto relative flex h-10 w-10 items-center justify-center rounded-full border border-border bg-card/70 backdrop-blur-md transition-transform active:scale-90"
+          className="relative flex h-10 w-10 items-center justify-center rounded-full border border-border bg-card/70 backdrop-blur-md transition-transform active:scale-90"
         >
           <SlidersHorizontal className="h-4.5 w-4.5" />
           {activeFilterCount > 0 && (
@@ -204,9 +201,12 @@ function Feed() {
         </button>
       </header>
 
-      <main className="relative mx-auto w-full max-w-md flex-1 overflow-hidden" style={{ touchAction: "pan-x" }}>
+      <main
+        className="relative mx-auto w-full max-w-md flex-1 overflow-hidden px-4"
+        style={{ touchAction: "pan-x", paddingBottom: "calc(3.5rem + env(safe-area-inset-bottom))" }}
+      >
         {filtered.length === 0 ? (
-          <div className="absolute inset-0 p-4 pt-[max(4rem,env(safe-area-inset-top))]">
+          <div className="absolute inset-4" style={{ bottom: "calc(3.5rem + env(safe-area-inset-bottom))" }}>
             <EmptyState hasFilters={activeFilterCount > 0} onClear={() => setFilters(EMPTY_FILTERS)} />
           </div>
         ) : (
