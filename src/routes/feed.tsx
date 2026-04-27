@@ -266,12 +266,14 @@ function Feed() {
 
 function EmptyState({ hasFilters, onClear }: { hasFilters: boolean; onClear: () => void }) {
   return (
-    <div className="flex h-full w-full flex-col items-center justify-center rounded-3xl border border-border bg-gradient-card p-8 text-center">
-      <Sparkles className="h-10 w-10 text-primary" />
-      <h3 className="mt-4 text-xl font-bold">
+    <div className="flex h-full w-full flex-col items-center justify-center rounded-3xl border border-border bg-gradient-card px-8 py-12 text-center">
+      <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10">
+        <Sparkles className="h-7 w-7 text-primary" />
+      </div>
+      <h3 className="mt-6 text-2xl font-bold leading-tight">
         {hasFilters ? "No matches for these filters" : "You're all caught up"}
       </h3>
-      <p className="mt-2 text-sm text-muted-foreground">
+      <p className="mt-3 max-w-xs text-sm leading-relaxed text-muted-foreground">
         {hasFilters
           ? "Try removing a filter to see more profiles."
           : "Check back soon — new profiles join Linkr every day."}
@@ -279,7 +281,7 @@ function EmptyState({ hasFilters, onClear }: { hasFilters: boolean; onClear: () 
       {hasFilters && (
         <button
           onClick={onClear}
-          className="mt-5 rounded-full bg-gradient-primary px-5 py-2.5 text-sm font-semibold text-primary-foreground shadow-glow"
+          className="mt-7 rounded-full bg-gradient-primary px-6 py-3 text-sm font-semibold text-primary-foreground shadow-glow"
         >
           Clear filters
         </button>
