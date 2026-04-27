@@ -180,7 +180,7 @@ function Feed() {
       className="fixed inset-0 flex flex-col overflow-hidden overscroll-none bg-background"
       style={{ touchAction: "pan-x" }}
     >
-      <header className="relative z-20 flex shrink-0 items-center justify-between px-5 pt-[max(1rem,env(safe-area-inset-top))] pb-3">
+      <header className="relative z-20 flex shrink-0 items-center justify-between px-5 pt-[max(0.5rem,env(safe-area-inset-top))] pb-1">
         <div className="flex items-center gap-2">
           <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-primary shadow-glow">
             <Flame className="h-4.5 w-4.5 text-primary-foreground" strokeWidth={2.5} />
