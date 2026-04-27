@@ -164,7 +164,7 @@ function Feed() {
 
   if (authLoading || profiles === null || filtered === null) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-background">
+      <div className="flex items-center justify-center bg-background" style={{ height: "100dvh" }}>
         <Flame className="h-8 w-8 animate-pulse text-primary" />
       </div>
     );
@@ -176,8 +176,15 @@ function Feed() {
     (filters.country.trim() ? 1 : 0) + filters.genders.length + filters.categories.length;
 
   return (
-    <div className="fixed inset-0 flex flex-col overflow-hidden overscroll-none bg-background pb-16" style={{ touchAction: "pan-x" }}>
-      <header className="flex items-center justify-between px-5 pt-10 pb-2">
+    <div
+      className="fixed inset-x-0 top-0 flex flex-col overflow-hidden overscroll-none bg-background"
+      style={{
+        height: "100dvh",
+        touchAction: "pan-x",
+        paddingBottom: "calc(4rem + env(safe-area-inset-bottom))",
+      }}
+    >
+      <header className="flex items-center justify-between px-5 pt-[max(2.5rem,env(safe-area-inset-top))] pb-2">
         <div className="flex items-center gap-2">
           <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-primary shadow-glow">
             <Flame className="h-4.5 w-4.5 text-primary-foreground" strokeWidth={2.5} />
@@ -198,7 +205,7 @@ function Feed() {
         </button>
       </header>
 
-      <main className="mx-auto flex w-full max-w-md flex-1 flex-col px-4 pb-20 overflow-hidden">
+      <main className="mx-auto flex w-full max-w-md flex-1 flex-col px-4 pb-24 overflow-hidden">
         <div className="relative w-full flex-1 min-h-0 overflow-hidden" style={{ touchAction: "pan-x" }}>
           {filtered.length === 0 ? (
             <EmptyState hasFilters={activeFilterCount > 0} onClear={() => setFilters(EMPTY_FILTERS)} />
@@ -217,7 +224,7 @@ function Feed() {
       </main>
 
       {top && (
-        <div className="pointer-events-none fixed inset-x-0 bottom-[calc(4rem+1.75rem)] z-30 flex flex-col items-center gap-1.5 pb-[env(safe-area-inset-bottom)]">
+        <div className="pointer-events-none fixed inset-x-0 bottom-[calc(4rem+env(safe-area-inset-bottom)+0.75rem)] z-30 flex flex-col items-center gap-1.5">
           <div className="pointer-events-auto">
             <SwipeActions
               onSkip={() => handleSwipe("skip")}
