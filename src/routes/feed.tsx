@@ -202,8 +202,8 @@ function Feed() {
       </header>
 
       <main
-        className="relative mx-auto w-full max-w-md flex-1 overflow-hidden px-4 pb-3"
-        style={{ touchAction: "pan-x" }}
+        className="relative mx-auto w-full max-w-md flex-1 overflow-hidden px-4 pt-1"
+        style={{ touchAction: "pan-x", paddingBottom: "calc(11rem + env(safe-area-inset-bottom))" }}
       >
         {filtered.length === 0 ? (
           <div className="flex h-full w-full items-start justify-center pb-20 pt-[12vh]">
