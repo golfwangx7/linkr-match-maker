@@ -176,8 +176,15 @@ function Feed() {
     (filters.country.trim() ? 1 : 0) + filters.genders.length + filters.categories.length;
 
   return (
-    <div className="fixed inset-0 flex flex-col overflow-hidden overscroll-none bg-background pb-16" style={{ touchAction: "pan-x" }}>
-      <header className="flex items-center justify-between px-5 pt-10 pb-2">
+    <div
+      className="fixed inset-x-0 top-0 flex flex-col overflow-hidden overscroll-none bg-background"
+      style={{
+        height: "100dvh",
+        touchAction: "pan-x",
+        paddingBottom: "calc(4rem + env(safe-area-inset-bottom))",
+      }}
+    >
+      <header className="flex items-center justify-between px-5 pt-[max(2.5rem,env(safe-area-inset-top))] pb-2">
         <div className="flex items-center gap-2">
           <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-primary shadow-glow">
             <Flame className="h-4.5 w-4.5 text-primary-foreground" strokeWidth={2.5} />
