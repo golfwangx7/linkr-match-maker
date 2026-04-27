@@ -84,7 +84,7 @@ export function SwipeCard({
       }
       whileTap={{ cursor: "grabbing" }}
     >
-      <div className="relative h-full w-full overflow-hidden bg-gradient-card">
+      <div className="relative h-full w-full overflow-hidden rounded-3xl bg-gradient-card shadow-card">
         <img
           src={profile.image_url || fallback}
           alt={profile.display_name ?? "profile"}
