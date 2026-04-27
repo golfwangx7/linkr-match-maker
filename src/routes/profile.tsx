@@ -35,6 +35,7 @@ type Profile = {
   categories: string[] | null;
   country: string | null;
   custom_country: string | null;
+  looking_for: string[] | null;
 };
 
 export const Route = createFileRoute("/profile")({
