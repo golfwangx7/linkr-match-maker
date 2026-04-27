@@ -85,6 +85,7 @@ export type Database = {
           id: string
           image_url: string | null
           instagram: string | null
+          looking_for: string[]
           product_description: string | null
           role: Database["public"]["Enums"]["user_role"] | null
           tiktok: string | null
@@ -101,6 +102,7 @@ export type Database = {
           id: string
           image_url?: string | null
           instagram?: string | null
+          looking_for?: string[]
           product_description?: string | null
           role?: Database["public"]["Enums"]["user_role"] | null
           tiktok?: string | null
@@ -117,6 +119,7 @@ export type Database = {
           id?: string
           image_url?: string | null
           instagram?: string | null
+          looking_for?: string[]
           product_description?: string | null
           role?: Database["public"]["Enums"]["user_role"] | null
           tiktok?: string | null
