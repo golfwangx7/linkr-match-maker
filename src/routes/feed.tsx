@@ -183,17 +183,17 @@ function Feed() {
         touchAction: "pan-x",
       }}
     >
-      <header className="flex items-center justify-between px-5 pt-[max(2.5rem,env(safe-area-inset-top))] pb-2">
-        <div className="flex items-center gap-2">
+      <header className="pointer-events-none absolute inset-x-0 top-0 z-20 flex items-center justify-between px-5 pt-[max(1rem,env(safe-area-inset-top))] pb-2">
+        <div className="pointer-events-auto flex items-center gap-2">
           <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-primary shadow-glow">
             <Flame className="h-4.5 w-4.5 text-primary-foreground" strokeWidth={2.5} />
           </div>
-          <span className="text-lg font-bold">Linkr</span>
+          <span className="text-lg font-bold drop-shadow-[0_2px_8px_rgba(0,0,0,0.5)]">Linkr</span>
         </div>
         <button
           onClick={() => setFilterOpen(true)}
           aria-label="Filters"
-          className="relative flex h-10 w-10 items-center justify-center rounded-full border border-border bg-card transition-transform active:scale-90"
+          className="pointer-events-auto relative flex h-10 w-10 items-center justify-center rounded-full border border-border bg-card/70 backdrop-blur-md transition-transform active:scale-90"
         >
           <SlidersHorizontal className="h-4.5 w-4.5" />
           {activeFilterCount > 0 && (
@@ -204,22 +204,22 @@ function Feed() {
         </button>
       </header>
 
-      <main className="mx-auto flex w-full max-w-md flex-1 flex-col overflow-hidden px-4">
-        <div className="relative w-full flex-1 min-h-0 overflow-hidden" style={{ touchAction: "pan-x" }}>
-          {filtered.length === 0 ? (
+      <main className="relative mx-auto w-full max-w-md flex-1 overflow-hidden" style={{ touchAction: "pan-x" }}>
+        {filtered.length === 0 ? (
+          <div className="absolute inset-0 p-4 pt-[max(4rem,env(safe-area-inset-top))]">
             <EmptyState hasFilters={activeFilterCount > 0} onClear={() => setFilters(EMPTY_FILTERS)} />
-          ) : (
-            visible.map((p, i) => (
-              <SwipeCard
-                key={p.id}
-                profile={p}
-                onSwipe={handleSwipe}
-                active={i === visible.length - 1}
-                index={visible.length - 1 - i}
-              />
-            ))
-          )}
-        </div>
+          </div>
+        ) : (
+          visible.map((p, i) => (
+            <SwipeCard
+              key={p.id}
+              profile={p}
+              onSwipe={handleSwipe}
+              active={i === visible.length - 1}
+              index={visible.length - 1 - i}
+            />
+          ))
+        )}
       </main>
 
       {top && (
