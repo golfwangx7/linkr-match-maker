@@ -1,7 +1,7 @@
 import { useRef, useState } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import { motion, useMotionValue, useTransform, type PanInfo } from "framer-motion";
-import { Heart, X, Instagram, Music2, Tag, Sparkles, DollarSign, Info } from "lucide-react";
+import { Heart, X, Instagram, Music2, Tag, Sparkles, DollarSign, Info, Target } from "lucide-react";
 
 export type SwipeProfile = {
   id: string;
@@ -13,6 +13,7 @@ export type SwipeProfile = {
   tiktok: string | null;
   product_description: string | null;
   categories: string[] | null;
+  looking_for: string[] | null;
 };
 
 export function SwipeCard({
