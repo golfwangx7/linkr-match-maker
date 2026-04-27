@@ -176,7 +176,7 @@ function Feed() {
     (filters.country.trim() ? 1 : 0) + filters.genders.length + filters.categories.length;
 
   return (
-    <div className="flex min-h-screen flex-col bg-background pb-16">
+    <div className="fixed inset-0 flex flex-col overflow-hidden overscroll-none bg-background pb-16" style={{ touchAction: "pan-x" }}>
       <header className="flex items-center justify-between px-5 pt-10 pb-2">
         <div className="flex items-center gap-2">
           <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-primary shadow-glow">
@@ -198,8 +198,8 @@ function Feed() {
         </button>
       </header>
 
-      <main className="mx-auto flex w-full max-w-md flex-1 flex-col px-4 pb-20">
-        <div className="relative w-full flex-1 min-h-0">
+      <main className="mx-auto flex w-full max-w-md flex-1 flex-col px-4 pb-20 overflow-hidden">
+        <div className="relative w-full flex-1 min-h-0 overflow-hidden" style={{ touchAction: "pan-x" }}>
           {filtered.length === 0 ? (
             <EmptyState hasFilters={activeFilterCount > 0} onClear={() => setFilters(EMPTY_FILTERS)} />
           ) : (
