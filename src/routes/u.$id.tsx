@@ -2,7 +2,7 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
-import { ArrowLeft, Instagram, Music2, Tag, Sparkles, DollarSign } from "lucide-react";
+import { ArrowLeft, Instagram, Music2, Tag, Sparkles, DollarSign, Target } from "lucide-react";
 
 type ProfileRow = {
   id: string;
@@ -14,6 +14,7 @@ type ProfileRow = {
   tiktok: string | null;
   product_description: string | null;
   categories: string[] | null;
+  looking_for: string[] | null;
 };
 
 export const Route = createFileRoute("/u/$id")({
