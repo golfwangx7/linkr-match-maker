@@ -15,8 +15,14 @@ export function BottomNav() {
   ] as const;
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-40 border-t border-border bg-background/80 backdrop-blur-xl">
-      <div className="mx-auto flex max-w-md items-stretch justify-around px-4 pb-[env(safe-area-inset-bottom)]">
+    <nav
+      className="fixed inset-x-0 bottom-0 z-40 border-t border-border bg-background/95 backdrop-blur-xl"
+      style={{
+        paddingBottom: "env(safe-area-inset-bottom)",
+        backgroundColor: "color-mix(in oklab, var(--background) 95%, transparent)",
+      }}
+    >
+      <div className="mx-auto flex max-w-md items-stretch justify-around px-4">
         {items.map(({ to, label, icon: Icon, badge }) => {
           const active = pathname.startsWith(to);
           return (
