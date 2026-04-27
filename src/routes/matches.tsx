@@ -345,6 +345,7 @@ function Matches() {
           )}
         </section>
       </main>
+      </div>
 
       <BottomNav />
     </div>
