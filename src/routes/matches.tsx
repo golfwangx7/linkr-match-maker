@@ -196,11 +196,21 @@ function Matches() {
   };
 
   return (
-    <div className="min-h-screen bg-background pb-24">
-      <header className="px-5 pt-12 pb-4">
-        <h1 className="text-3xl font-bold">Matches</h1>
-        <p className="mt-1 text-sm text-muted-foreground">Your mutual likes — start a conversation.</p>
-      </header>
+    <div
+      className="fixed inset-x-0 top-0 flex flex-col overflow-hidden bg-background"
+      style={{ height: "100dvh" }}
+    >
+      <div
+        className="flex-1 overflow-y-auto overscroll-contain"
+        style={{
+          paddingBottom: "calc(4rem + env(safe-area-inset-bottom))",
+          WebkitOverflowScrolling: "touch",
+        }}
+      >
+        <header className="px-5 pt-[max(3rem,env(safe-area-inset-top))] pb-4">
+          <h1 className="text-3xl font-bold">Matches</h1>
+          <p className="mt-1 text-sm text-muted-foreground">Your mutual likes — start a conversation.</p>
+        </header>
 
       <main className="mx-auto w-full max-w-md px-5 space-y-6">
         {/* Likes You */}
