@@ -198,8 +198,8 @@ function Feed() {
         </button>
       </header>
 
-      <main className="mx-auto flex w-full max-w-md flex-1 flex-col px-4 pb-20">
-        <div className="relative w-full flex-1 min-h-0">
+      <main className="mx-auto flex w-full max-w-md flex-1 flex-col px-4 pb-20 overflow-hidden">
+        <div className="relative w-full flex-1 min-h-0 overflow-hidden" style={{ touchAction: "pan-x" }}>
           {filtered.length === 0 ? (
             <EmptyState hasFilters={activeFilterCount > 0} onClear={() => setFilters(EMPTY_FILTERS)} />
           ) : (
