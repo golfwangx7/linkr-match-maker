@@ -180,7 +180,7 @@ function Feed() {
       className="fixed inset-0 flex flex-col overflow-hidden overscroll-none bg-background"
       style={{ touchAction: "pan-x" }}
     >
-      <header className="relative z-20 flex shrink-0 items-center justify-between px-5 pt-[max(1rem,env(safe-area-inset-top))] pb-3">
+      <header className="relative z-20 flex shrink-0 items-center justify-between px-5 pt-[max(0.5rem,env(safe-area-inset-top))] pb-1">
         <div className="flex items-center gap-2">
           <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-primary shadow-glow">
             <Flame className="h-4.5 w-4.5 text-primary-foreground" strokeWidth={2.5} />
@@ -202,8 +202,8 @@ function Feed() {
       </header>
 
       <main
-        className="relative mx-auto w-full max-w-md flex-1 overflow-hidden px-4 pb-3"
-        style={{ touchAction: "pan-x" }}
+        className="relative mx-auto w-full max-w-md flex-1 overflow-hidden px-4 pt-1"
+        style={{ touchAction: "pan-x", paddingBottom: "calc(11rem + env(safe-area-inset-bottom))" }}
       >
         {filtered.length === 0 ? (
           <div className="flex h-full w-full items-start justify-center pb-20 pt-[12vh]">
