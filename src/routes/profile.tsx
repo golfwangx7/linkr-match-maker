@@ -351,6 +351,7 @@ function ProfilePage() {
           {saving ? "Saving…" : "Save changes"}
         </button>
       </main>
+      </div>
 
       <BottomNav />
 
