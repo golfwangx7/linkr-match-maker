@@ -147,6 +147,25 @@ function ProfileDetail() {
           </section>
         )}
 
+        {profile.looking_for && profile.looking_for.length > 0 && (
+          <section className="mt-7">
+            <h2 className="mb-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              {profile.role === "brand" ? "Looking for" : "Open to"}
+            </h2>
+            <div className="flex flex-wrap gap-2">
+              {profile.looking_for.map((l) => (
+                <span
+                  key={l}
+                  className="inline-flex items-center gap-1.5 rounded-full border border-primary/40 bg-primary/10 px-3.5 py-1.5 text-sm font-semibold text-primary"
+                >
+                  <Target className="h-3.5 w-3.5" />
+                  {l}
+                </span>
+              ))}
+            </div>
+          </section>
+        )}
+
         <section className="mt-7">
           <h2 className="mb-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
             {isCreator ? "Socials" : "Connect"}
