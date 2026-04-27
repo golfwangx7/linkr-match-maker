@@ -176,7 +176,7 @@ function Feed() {
     (filters.country.trim() ? 1 : 0) + filters.genders.length + filters.categories.length;
 
   return (
-    <div className="flex min-h-screen flex-col bg-background pb-16">
+    <div className="fixed inset-0 flex flex-col overflow-hidden overscroll-none bg-background pb-16" style={{ touchAction: "pan-x" }}>
       <header className="flex items-center justify-between px-5 pt-10 pb-2">
         <div className="flex items-center gap-2">
           <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-primary shadow-glow">
