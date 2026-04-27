@@ -127,20 +127,18 @@ export function SwipeCard({
           </div>
         </div>
 
-        <div
-          className="absolute inset-x-0 bottom-0 px-6 pb-6 pt-8 text-white"
-        >
+        <div className="absolute inset-x-0 bottom-0 px-6 pb-4 pt-7 text-white">
           <div className="mb-4 inline-flex rounded-full bg-white/15 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider backdrop-blur">
             {profile.role}
           </div>
           <h2 className="text-3xl font-bold leading-tight">{profile.display_name ?? "Anonymous"}</h2>
           {(profile.bio || profile.product_description) && (
-            <p className="mt-4 line-clamp-3 text-sm leading-relaxed text-white/85">
+            <p className="mt-3 line-clamp-3 text-sm leading-relaxed text-white/85">
               {profile.bio || profile.product_description}
             </p>
           )}
           {profile.looking_for && profile.looking_for.length > 0 && (
-            <div className="mt-5">
+            <div className="mt-4">
               <div className="mb-2 flex items-center gap-1 text-[10px] font-semibold uppercase tracking-wider text-white/70">
                 <Target className="h-3 w-3" />
                 {profile.role === "brand" ? "Looking for" : "Open to"}
@@ -158,7 +156,7 @@ export function SwipeCard({
             </div>
           )}
           {profile.categories && profile.categories.length > 0 && (
-            <div className="mt-4 flex flex-wrap gap-2">
+            <div className="mt-3.5 flex flex-wrap gap-2">
               {profile.categories.slice(0, 4).map((c) => (
                 <span
                   key={c}
@@ -185,7 +183,7 @@ export function SwipeCard({
           )}
 
           {active && (
-            <div className="mt-5 inline-flex items-center gap-1.5 rounded-full bg-white/15 px-3.5 py-2 text-xs font-semibold text-white backdrop-blur">
+            <div className="mt-4 inline-flex items-center gap-1.5 rounded-full bg-white/15 px-3.5 py-2 text-xs font-semibold text-white backdrop-blur">
               <Info className="h-3.5 w-3.5" />
               Tap to view profile
             </div>
