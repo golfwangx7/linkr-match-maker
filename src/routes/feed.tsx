@@ -225,7 +225,7 @@ function Feed() {
       {top && (
         <div
           className="pointer-events-none fixed inset-x-0 z-30 flex flex-col items-center gap-1.5"
-          style={{ bottom: "calc(4.5rem + env(safe-area-inset-bottom))" }}
+          style={{ bottom: "calc(5rem + env(safe-area-inset-bottom))" }}
         >
           <div className="pointer-events-auto">
             <SwipeActions
