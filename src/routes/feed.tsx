@@ -164,7 +164,7 @@ function Feed() {
 
   if (authLoading || profiles === null || filtered === null) {
     return (
-      <div className="flex min-h-screen items-center justify-center bg-background">
+      <div className="flex items-center justify-center bg-background" style={{ height: "100dvh" }}>
         <Flame className="h-8 w-8 animate-pulse text-primary" />
       </div>
     );
