@@ -73,6 +73,12 @@ function ProfilePage() {
     update("categories", cur.includes(c) ? cur.filter((x) => x !== c) : [...cur, c]);
   };
 
+  const toggleLookingFor = (l: string) => {
+    if (!p) return;
+    const cur = p.looking_for ?? [];
+    update("looking_for", cur.includes(l) ? cur.filter((x) => x !== l) : [...cur, l]);
+  };
+
   const save = async () => {
     if (!p || !user) return;
     setSaving(true);
