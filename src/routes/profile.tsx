@@ -160,8 +160,18 @@ function ProfilePage() {
   const isCreator = p.role === "creator";
 
   return (
-    <div className="min-h-screen bg-background pb-40">
-      <header className="px-5 pt-12 pb-4">
+    <div
+      className="fixed inset-x-0 top-0 flex flex-col overflow-hidden bg-background"
+      style={{ height: "100dvh" }}
+    >
+      <div
+        className="flex-1 overflow-y-auto overscroll-contain"
+        style={{
+          paddingBottom: "calc(4rem + env(safe-area-inset-bottom))",
+          WebkitOverflowScrolling: "touch",
+        }}
+      >
+      <header className="px-5 pt-[max(3rem,env(safe-area-inset-top))] pb-4">
         <div className="flex items-center justify-between gap-2">
           <h1 className="truncate text-2xl font-bold sm:text-3xl">Profile</h1>
           <div className="flex shrink-0 flex-row items-center gap-2">
@@ -377,6 +387,7 @@ function ProfilePage() {
           {saving ? "Saving…" : "Save changes"}
         </button>
       </main>
+      </div>
 
       <BottomNav />
 

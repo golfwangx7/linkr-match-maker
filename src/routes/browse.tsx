@@ -66,47 +66,58 @@ function Browse() {
   }
 
   return (
-    <div className="flex min-h-screen flex-col bg-background pb-20">
-      <header className="px-5 pt-10 pb-3">
-        <h1 className="text-2xl font-bold">Feed</h1>
-        <p className="text-sm text-muted-foreground">Browse creators and brands</p>
-      </header>
+    <div
+      className="fixed inset-x-0 top-0 flex flex-col overflow-hidden bg-background"
+      style={{ height: "100dvh" }}
+    >
+      <div
+        className="flex-1 overflow-y-auto overscroll-contain"
+        style={{
+          paddingBottom: "calc(4rem + env(safe-area-inset-bottom))",
+          WebkitOverflowScrolling: "touch",
+        }}
+      >
+        <header className="px-5 pt-[max(2.5rem,env(safe-area-inset-top))] pb-3">
+          <h1 className="text-2xl font-bold">Feed</h1>
+          <p className="text-sm text-muted-foreground">Browse creators and brands</p>
+        </header>
 
-      <div className="sticky top-0 z-10 -mb-2 bg-background/80 px-5 py-3 backdrop-blur-xl">
-        <div className="flex gap-2 overflow-x-auto">
-          {FILTERS.map((f) => {
-            const active = filter === f;
-            return (
-              <button
-                key={f}
-                type="button"
-                onClick={() => setFilter(f)}
-                className={`shrink-0 rounded-full border px-4 py-1.5 text-xs font-semibold transition-all ${
-                  active
-                    ? "border-transparent bg-gradient-primary text-primary-foreground shadow-glow"
-                    : "border-border bg-card text-muted-foreground"
-                }`}
-              >
-                {f}
-              </button>
-            );
-          })}
+        <div className="sticky top-0 z-10 -mb-2 bg-background/80 px-5 py-3 backdrop-blur-xl">
+          <div className="flex gap-2 overflow-x-auto">
+            {FILTERS.map((f) => {
+              const active = filter === f;
+              return (
+                <button
+                  key={f}
+                  type="button"
+                  onClick={() => setFilter(f)}
+                  className={`shrink-0 rounded-full border px-4 py-1.5 text-xs font-semibold transition-all ${
+                    active
+                      ? "border-transparent bg-gradient-primary text-primary-foreground shadow-glow"
+                      : "border-border bg-card text-muted-foreground"
+                  }`}
+                >
+                  {f}
+                </button>
+              );
+            })}
+          </div>
         </div>
-      </div>
 
-      <main className="mx-auto w-full max-w-md flex-1 px-4 pt-4">
-        {filtered.length === 0 ? (
-          <div className="mt-16 text-center text-sm text-muted-foreground">
-            No profiles match this filter.
-          </div>
-        ) : (
-          <div className="grid grid-cols-2 gap-3">
-            {filtered.map((p) => (
-              <ProfileCard key={p.id} profile={p} />
-            ))}
-          </div>
-        )}
-      </main>
+        <main className="mx-auto w-full max-w-md px-4 pt-4">
+          {filtered.length === 0 ? (
+            <div className="mt-16 text-center text-sm text-muted-foreground">
+              No profiles match this filter.
+            </div>
+          ) : (
+            <div className="grid grid-cols-2 gap-3">
+              {filtered.map((p) => (
+                <ProfileCard key={p.id} profile={p} />
+              ))}
+            </div>
+          )}
+        </main>
+      </div>
 
       <BottomNav />
     </div>
