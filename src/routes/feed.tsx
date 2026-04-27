@@ -202,8 +202,8 @@ function Feed() {
       </header>
 
       <main
-        className="relative mx-auto w-full max-w-md flex-1 overflow-hidden px-4"
-        style={{ touchAction: "pan-x", paddingBottom: "calc(3.5rem + env(safe-area-inset-bottom))" }}
+        className="relative mx-auto w-full max-w-md flex-1 overflow-hidden px-4 pb-3"
+        style={{ touchAction: "pan-x" }}
       >
         {filtered.length === 0 ? (
           <div className="flex h-full w-full items-start justify-center pb-20 pt-[12vh]">
@@ -223,7 +223,10 @@ function Feed() {
       </main>
 
       {top && (
-        <div className="pointer-events-none fixed inset-x-0 bottom-[calc(4rem+env(safe-area-inset-bottom)+0.75rem)] z-30 flex flex-col items-center gap-1.5">
+        <div
+          className="pointer-events-none fixed inset-x-0 z-30 flex flex-col items-center gap-1.5"
+          style={{ bottom: "calc(5.5rem + env(safe-area-inset-bottom))" }}
+        >
           <div className="pointer-events-auto">
             <SwipeActions
               onSkip={() => handleSwipe("skip")}
