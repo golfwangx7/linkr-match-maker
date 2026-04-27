@@ -206,7 +206,7 @@ function Feed() {
         style={{ touchAction: "pan-x", paddingBottom: "calc(3.5rem + env(safe-area-inset-bottom))" }}
       >
         {filtered.length === 0 ? (
-          <div className="absolute inset-4" style={{ bottom: "calc(3.5rem + env(safe-area-inset-bottom))" }}>
+          <div className="flex h-full w-full items-start justify-center pb-20 pt-[12vh]">
             <EmptyState hasFilters={activeFilterCount > 0} onClear={() => setFilters(EMPTY_FILTERS)} />
           </div>
         ) : (
