@@ -266,7 +266,7 @@ function Feed() {
 
 function EmptyState({ hasFilters, onClear }: { hasFilters: boolean; onClear: () => void }) {
   return (
-    <div className="flex h-full w-full flex-col items-center justify-center rounded-3xl border border-border bg-gradient-card px-8 py-12 text-center">
+    <div className="flex w-full max-w-sm flex-col items-center justify-center rounded-3xl border border-border bg-gradient-card px-8 py-12 text-center">
       <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-primary/10">
         <Sparkles className="h-7 w-7 text-primary" />
       </div>
