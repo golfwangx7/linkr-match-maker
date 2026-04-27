@@ -2,7 +2,7 @@ import { createFileRoute, Link, useNavigate } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/lib/auth-context";
-import { ArrowLeft, Instagram, Music2, Tag, Sparkles, DollarSign } from "lucide-react";
+import { ArrowLeft, Instagram, Music2, Tag, Sparkles, DollarSign, Target } from "lucide-react";
 
 type ProfileRow = {
   id: string;
@@ -14,6 +14,7 @@ type ProfileRow = {
   tiktok: string | null;
   product_description: string | null;
   categories: string[] | null;
+  looking_for: string[] | null;
 };
 
 export const Route = createFileRoute("/u/$id")({
@@ -140,6 +141,25 @@ function ProfileDetail() {
                 >
                   <Tag className="h-3.5 w-3.5 text-primary" />
                   {c}
+                </span>
+              ))}
+            </div>
+          </section>
+        )}
+
+        {profile.looking_for && profile.looking_for.length > 0 && (
+          <section className="mt-7">
+            <h2 className="mb-3 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+              {profile.role === "brand" ? "Looking for" : "Open to"}
+            </h2>
+            <div className="flex flex-wrap gap-2">
+              {profile.looking_for.map((l) => (
+                <span
+                  key={l}
+                  className="inline-flex items-center gap-1.5 rounded-full border border-primary/40 bg-primary/10 px-3.5 py-1.5 text-sm font-semibold text-primary"
+                >
+                  <Target className="h-3.5 w-3.5" />
+                  {l}
                 </span>
               ))}
             </div>

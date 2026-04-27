@@ -5,6 +5,7 @@ import { useAuth } from "@/lib/auth-context";
 import { BottomNav } from "@/components/BottomNav";
 import { CATEGORIES } from "@/lib/categories";
 import { COUNTRIES, OTHER_COUNTRY } from "@/lib/countries";
+import { lookingForOptions } from "@/lib/looking-for";
 import {
   Select,
   SelectContent,
@@ -34,6 +35,7 @@ type Profile = {
   categories: string[] | null;
   country: string | null;
   custom_country: string | null;
+  looking_for: string[] | null;
 };
 
 export const Route = createFileRoute("/profile")({
@@ -71,6 +73,12 @@ function ProfilePage() {
     update("categories", cur.includes(c) ? cur.filter((x) => x !== c) : [...cur, c]);
   };
 
+  const toggleLookingFor = (l: string) => {
+    if (!p) return;
+    const cur = p.looking_for ?? [];
+    update("looking_for", cur.includes(l) ? cur.filter((x) => x !== l) : [...cur, l]);
+  };
+
   const save = async () => {
     if (!p || !user) return;
     setSaving(true);
@@ -87,6 +95,7 @@ function ProfilePage() {
         country: p.country,
         custom_country:
           p.country === OTHER_COUNTRY ? p.custom_country?.trim() || null : null,
+        looking_for: p.looking_for ?? [],
       } as never)
       .eq("id", user.id);
     setSaving(false);
@@ -301,6 +310,33 @@ function ProfilePage() {
               })}
             </div>
           </div>
+
+          {lookingForOptions(p.role).length > 0 && (
+            <div>
+              <label className="mb-2 block text-xs font-medium uppercase tracking-wider text-muted-foreground">
+                {isCreator ? "I'm looking for" : "We're looking for"}
+              </label>
+              <div className="flex flex-wrap gap-2">
+                {lookingForOptions(p.role).map((l) => {
+                  const active = (p.looking_for ?? []).includes(l);
+                  return (
+                    <button
+                      key={l}
+                      type="button"
+                      onClick={() => toggleLookingFor(l)}
+                      className={`rounded-full border px-4 py-2 text-sm font-medium transition-all ${
+                        active
+                          ? "border-transparent bg-gradient-primary text-primary-foreground shadow-glow"
+                          : "border-border bg-card text-foreground"
+                      }`}
+                    >
+                      {l}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          )}
 
           <Field label="Country">
             <Select
