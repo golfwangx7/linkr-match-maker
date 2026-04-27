@@ -72,7 +72,7 @@ export function SwipeCard({
       drag={active ? "x" : false}
       dragDirectionLock
       dragConstraints={{ left: 0, right: 0, top: 0, bottom: 0 }}
-      style={{ x, rotate, zIndex: 10 - index, touchAction: "pan-y" }}
+      style={{ x, rotate, zIndex: 10 - index, touchAction: "none" }}
       onDragEnd={handleEnd}
       onPointerDown={handlePointerDown}
       onPointerUp={handlePointerUp}
