@@ -1,0 +1,1 @@
+ALTER TABLE public.profiles ADD COLUMN looking_for TEXT[] NOT NULL DEFAULT '{}'::text[];
