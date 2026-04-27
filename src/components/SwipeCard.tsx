@@ -137,6 +137,24 @@ export function SwipeCard({
               {profile.bio || profile.product_description}
             </p>
           )}
+          {profile.looking_for && profile.looking_for.length > 0 && (
+            <div className="mt-4">
+              <div className="mb-1.5 flex items-center gap-1 text-[10px] font-semibold uppercase tracking-wider text-white/70">
+                <Target className="h-3 w-3" />
+                {profile.role === "brand" ? "Looking for" : "Open to"}
+              </div>
+              <div className="flex flex-wrap gap-1.5">
+                {profile.looking_for.slice(0, 4).map((l) => (
+                  <span
+                    key={l}
+                    className="inline-flex items-center rounded-full border border-primary/40 bg-primary/20 px-2.5 py-1 text-[11px] font-semibold text-white shadow-[0_0_12px_-4px_var(--primary)] backdrop-blur"
+                  >
+                    {l}
+                  </span>
+                ))}
+              </div>
+            </div>
+          )}
           {profile.categories && profile.categories.length > 0 && (
             <div className="mt-5 flex flex-wrap gap-2">
               {profile.categories.slice(0, 4).map((c) => (
