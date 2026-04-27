@@ -5,6 +5,7 @@ import { useAuth } from "@/lib/auth-context";
 import { BottomNav } from "@/components/BottomNav";
 import { CATEGORIES } from "@/lib/categories";
 import { COUNTRIES, OTHER_COUNTRY } from "@/lib/countries";
+import { lookingForOptions } from "@/lib/looking-for";
 import {
   Select,
   SelectContent,
