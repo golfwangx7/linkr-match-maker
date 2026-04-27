@@ -311,6 +311,33 @@ function ProfilePage() {
             </div>
           </div>
 
+          {lookingForOptions(p.role).length > 0 && (
+            <div>
+              <label className="mb-2 block text-xs font-medium uppercase tracking-wider text-muted-foreground">
+                {isCreator ? "I'm looking for" : "We're looking for"}
+              </label>
+              <div className="flex flex-wrap gap-2">
+                {lookingForOptions(p.role).map((l) => {
+                  const active = (p.looking_for ?? []).includes(l);
+                  return (
+                    <button
+                      key={l}
+                      type="button"
+                      onClick={() => toggleLookingFor(l)}
+                      className={`rounded-full border px-4 py-2 text-sm font-medium transition-all ${
+                        active
+                          ? "border-transparent bg-gradient-primary text-primary-foreground shadow-glow"
+                          : "border-border bg-card text-foreground"
+                      }`}
+                    >
+                      {l}
+                    </button>
+                  );
+                })}
+              </div>
+            </div>
+          )}
+
           <Field label="Country">
             <Select
               value={p.country ?? ""}
