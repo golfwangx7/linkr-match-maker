@@ -127,7 +127,10 @@ export function SwipeCard({
           </div>
         </div>
 
-        <div className="absolute inset-x-0 bottom-0 p-6 text-white">
+        <div
+          className="absolute inset-x-0 bottom-0 p-6 text-white"
+          style={{ paddingBottom: "calc(11rem + env(safe-area-inset-bottom))" }}
+        >
           <div className="mb-3 inline-flex rounded-full bg-white/15 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider backdrop-blur">
             {profile.role}
           </div>
