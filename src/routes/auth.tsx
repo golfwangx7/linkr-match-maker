@@ -28,18 +28,32 @@ function AuthPage() {
   const [forgotLoading, setForgotLoading] = useState(false);
 
   useEffect(() => {
-    if (!authLoading && user) {
-      // route after auth depends on whether they picked a role
-      supabase
-        .from("profiles")
-        .select("role")
-        .eq("id", user.id)
-        .maybeSingle()
-        .then(({ data }) => {
-          if (!data?.role) navigate({ to: "/onboarding" });
-          else navigate({ to: "/feed" });
-        });
-    }
+    if (authLoading || !user) return;
+    let cancelled = false;
+    // Route after auth — never bounce back to /auth on transient errors.
+    // Apple may not share email/name; that's fine. We only need a session.
+    (async () => {
+      try {
+        const { data, error } = await supabase
+          .from("profiles")
+          .select("role")
+          .eq("id", user.id)
+          .maybeSingle();
+        if (cancelled) return;
+        if (error) {
+          // Transient read failure — default to onboarding rather than logging out.
+          navigate({ to: "/onboarding" });
+          return;
+        }
+        if (!data?.role) navigate({ to: "/onboarding" });
+        else navigate({ to: "/feed" });
+      } catch {
+        if (!cancelled) navigate({ to: "/onboarding" });
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
   }, [user, authLoading, navigate]);
 
   const handleSubmit = async (e: React.FormEvent) => {
