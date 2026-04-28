@@ -180,7 +180,10 @@ function Feed() {
       className="fixed inset-0 flex flex-col overflow-hidden overscroll-none bg-background"
       style={{ touchAction: "pan-x" }}
     >
-      <header className="relative z-20 flex shrink-0 items-center justify-between px-5 pt-[max(0.25rem,env(safe-area-inset-top))] pb-0">
+      <header
+        className="relative z-40 flex shrink-0 items-center justify-between px-5 pt-[max(0.25rem,env(safe-area-inset-top))] pb-0"
+        style={{ touchAction: "auto" }}
+      >
         <div className="flex items-center gap-2">
           <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-gradient-primary shadow-glow">
             <Flame className="h-4.5 w-4.5 text-primary-foreground" strokeWidth={2.5} />
@@ -188,13 +191,20 @@ function Feed() {
           <span className="text-lg font-bold">Linkr</span>
         </div>
         <button
-          onClick={() => setFilterOpen(true)}
+          type="button"
+          onPointerDown={(e) => e.stopPropagation()}
+          onTouchStart={(e) => e.stopPropagation()}
+          onClick={(e) => {
+            e.stopPropagation();
+            setFilterOpen(true);
+          }}
           aria-label="Filters"
-          className="relative flex h-10 w-10 items-center justify-center rounded-full border border-border bg-card/70 backdrop-blur-md transition-transform active:scale-90"
+          className="relative z-50 flex h-11 w-11 min-h-11 min-w-11 items-center justify-center rounded-full border border-border bg-card/70 backdrop-blur-md transition-transform active:scale-90"
+          style={{ touchAction: "manipulation" }}
         >
-          <SlidersHorizontal className="h-4.5 w-4.5" />
+          <SlidersHorizontal className="h-4.5 w-4.5 pointer-events-none" />
           {activeFilterCount > 0 && (
-            <span className="absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-gradient-primary px-1 text-[10px] font-bold text-primary-foreground shadow-glow">
+            <span className="pointer-events-none absolute -right-1 -top-1 flex h-5 min-w-5 items-center justify-center rounded-full bg-gradient-primary px-1 text-[10px] font-bold text-primary-foreground shadow-glow">
               {activeFilterCount}
             </span>
           )}
